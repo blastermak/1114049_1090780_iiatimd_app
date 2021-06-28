@@ -17,4 +17,12 @@
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
 
     <string name="actionButtonContentDescription">Content description for actionButton</string>
+
+<!--    Strings pertaining to new recipe screens-->
+    <string name="newRecipeHeaderText">Voeg een nieuw recept toe!</string>
+    <string name="newRecipeTitleHint">Receptnaam</string>
+    <string name="newRecipeShortDescriptionHint">Korte beschrijving</string>
+    <string name="newRecipeDescriptionHint">Uitgebreide beschrijving van het recept</string>
+    <string name="newRecipePrepTimeMinHint">Hoe lang duurt het koken?</string>
+    <string name="newRecipeSubmitButtonText">Voeg toe</string>
 </resources>
