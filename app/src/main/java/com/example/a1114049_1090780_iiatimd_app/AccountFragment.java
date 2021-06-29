@@ -4,9 +4,17 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -14,6 +22,10 @@ import android.view.ViewGroup;
  * create an instance of this fragment.
  */
 public class AccountFragment extends Fragment {
+
+    final String database_url = "http://localhost:8000/api/";
+    RequestQueue queue = Volley.newRequestQueue(this.getActivity());
+    String errorMessage;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -60,5 +72,47 @@ public class AccountFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_account, container, false);
+
+    }
+
+    public String register(String username, String email, String password) {
+        int wrongCode = 1;
+
+//        Temporarily get recipes to check
+        String url = database_url + "recipes";
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.d("heeftGewerkt", response.substring(30));
+                errorMessage = "Succesful register";
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("heeftNietGewerkt", error.getMessage());
+                errorMessage = "Unsuccesful register";
+            }
+        });
+
+        queue.add(stringRequest);
+
+        return errorMessage;
+    }
+
+    public String login(String username, String password) {
+        Boolean loginSuccesful = true;
+        String url = database_url + "login";
+
+        if (loginSuccesful) {
+            errorMessage = "Succesful login";
+        } else {
+            errorMessage = "Incorrect login credentials";
+        }
+        return errorMessage;
+    }
+
+    public void logout() {
+
+        String url = database_url + "logout";
     }
 }
