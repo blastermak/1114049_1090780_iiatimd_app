@@ -38,7 +38,9 @@
         app:counterMaxLength="20"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/newRecipeHeader">
+        app:layout_constraintTop_toBottomOf="@+id/newRecipeHeader"
+        app:endIconMode="clear_text"
+        app:errorEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editRecipeTitleEditText"
@@ -62,7 +64,9 @@
         app:counterMaxLength="50"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editRecipeTitle">
+        app:layout_constraintTop_toBottomOf="@+id/editRecipeTitle"
+        app:endIconMode="clear_text"
+        app:errorEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/newRecipeShortDescriptionEditText"
@@ -87,7 +91,9 @@
         app:counterMaxLength="500"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/newRecipeShortDescription" >
+        app:layout_constraintTop_toBottomOf="@+id/newRecipeShortDescription"
+        app:endIconMode="clear_text"
+        app:errorEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/newRecipeDescriptionEditText"
@@ -108,9 +114,11 @@
         android:ems="10"
         android:hint="@string/newRecipePrepTimeMinHint"
         android:inputType="number"
+        app:errorEnabled="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/newRecipeDescription" >
+        app:layout_constraintTop_toBottomOf="@+id/newRecipeDescription"
+        app:endIconMode="clear_text">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/newRecipePrepTimeMinEditText"
@@ -126,7 +134,6 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:onClick="submitRecipeHandler"
         android:text="@string/newRecipeSubmitButtonText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/newRecipePrepTimeMin" />

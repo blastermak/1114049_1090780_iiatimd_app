@@ -25,4 +25,5 @@
     <string name="newRecipeDescriptionHint">Uitgebreide beschrijving van het recept</string>
     <string name="newRecipePrepTimeMinHint">Hoe lang duurt het koken?</string>
     <string name="newRecipeSubmitButtonText">Voeg toe</string>
+    <string name="tooManyCharacters">Tekst is te lang!</string>
 </resources>
