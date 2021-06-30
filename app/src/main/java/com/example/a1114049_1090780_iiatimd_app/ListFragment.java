@@ -29,10 +29,10 @@ import java.util.List;
  * Use the {@link ListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ListFragment extends Fragment {
+public class ListFragment extends Fragment  {
 
     private RecyclerView recipeListRecyclerView;
-    private RecyclerView.Adapter recipeListRecyclerViewAdapter;
+    private RecipeAdapter recipeListRecyclerViewAdapter;
     private RecyclerView.LayoutManager layoutManager;
 
     private ArrayList<Recipe> myRecipes = new ArrayList<>();
@@ -130,5 +130,12 @@ public class ListFragment extends Fragment {
 
         recipeListRecyclerViewAdapter = new RecipeAdapter(myRecipes);
         recipeListRecyclerView.setAdapter(recipeListRecyclerViewAdapter);
+
+        recipeListRecyclerViewAdapter.setOnItemClickListener(new RecipeAdapter.recipeItemClickListener(){
+            @Override
+            public void onItemClick(int position){
+                Log.d("clicklistener", "clicked + " + String.valueOf(position));
+            }
+        });
     }
 }

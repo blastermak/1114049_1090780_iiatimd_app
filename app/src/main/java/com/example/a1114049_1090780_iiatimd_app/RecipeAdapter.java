@@ -13,41 +13,47 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder> {
+public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder>  {
 
     private ArrayList<Recipe> recipes;
-    private MyItemClickListener recipeOnClickListener;
+    private recipeItemClickListener recipeOnClickListener;
 
-
-    public interface MyItemClickListener {
-        void onItemClick(View view, int position);
+    public interface recipeItemClickListener {
+        void onItemClick(int position);
     }
+
+    public void setOnItemClickListener(recipeItemClickListener listener){
+        recipeOnClickListener = listener;
+    }
+
     public RecipeAdapter(ArrayList<Recipe> recipes){
         this.recipes = recipes;
     }
 
-    public static class RecipeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public static class RecipeViewHolder extends RecyclerView.ViewHolder {
         public TextView titleTextView;
         public TextView summaryTextView;
         public CardView recipeCardView;
-        private MyItemClickListener myItemClickListener;
+        private recipeItemClickListener myItemClickListener;
 
-        public RecipeViewHolder(View v, MyItemClickListener listener){
+        public RecipeViewHolder(View v, recipeItemClickListener listener){
             super(v);
             titleTextView = v.findViewById(R.id.recipeCardName);
             summaryTextView = v.findViewById(R.id.recipeCardSummary);
             recipeCardView = v.findViewById(R.id.recipeCard);
-            this.myItemClickListener = listener;
-            v.setOnClickListener(this);
-
+            v.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (listener != null){
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION) {
+                            listener.onItemClick(position);
+                        }
+                    }
+                }
+            });
         }
 
-        @Override
-        public void onClick(View v){
-            if (myItemClickListener != null){
-                myItemClickListener.onItemClick(v, getAdapterPosition());
-            }
-        }
     }
 
     @NonNull
@@ -71,8 +77,5 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         return recipes.size();
     }
 
-    public void setOnItemClickListener(MyItemClickListener listener){
-        this.recipeOnClickListener = listener;
-    }
 
 }

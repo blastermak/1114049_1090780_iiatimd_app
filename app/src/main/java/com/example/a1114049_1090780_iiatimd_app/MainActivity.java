@@ -14,8 +14,6 @@ import android.view.View;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.ArrayList;
-
 
 public class MainActivity extends AppCompatActivity {
 
@@ -23,8 +21,6 @@ public class MainActivity extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;
 
     private FloatingActionButton fab;
-
-
 
 
     @Override
