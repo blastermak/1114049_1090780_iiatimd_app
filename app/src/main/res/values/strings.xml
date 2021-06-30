@@ -4,6 +4,9 @@
     <string name="bottom_menu_list">Overzicht</string>
     <string name="bottom_menu_search">Zoek</string>
     <string name="bottom_menu_account">Account</string>
+    <string name="home_title_string">Recepten</string>
+    <string name="home_welcome_string">Geen zin om lang in de keuken te staan? Of om lang bezig te zijn om een recept uit te zoeken? Dan zit je hier op de juiste plek. Alle recepten zijn geschreven door studenten, voor studenten zodat je minder tijd kwijt bent met koken. Eetsmakelijk!</string>
+    <string name="search_text">Zoek hier naar een bestaand recept! Je kan zoeken op titel, ingrediënten of keuken.</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_recipe_detail">recipeDetailActivity</string>
