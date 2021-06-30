@@ -11,23 +11,39 @@ public class Recipe {
     private int uuid;
 
     @ColumnInfo
-    private String name;
+    private String title;
 
     @ColumnInfo
-    private String summary;
+    private String description_short;
 
-    public Recipe(int uuid, String name, String summary){
+    @ColumnInfo
+    private String description;
+
+    @ColumnInfo
+    private int prep_time_min;
+
+    public Recipe(int uuid, String title, String description_short, String description, int prep_time_min){
         this.uuid = uuid;
-        this.name = name;
-        this.summary = summary;
+        this.title = title;
+        this.description_short = description_short;
+        this.description = description;
+        this.prep_time_min = prep_time_min;
     }
 
-    public String getName(){
-        return this.name;
+    public String getTitle(){
+        return this.title;
     }
 
-    public String getSummary() {
-        return this.summary;
+    public String getDescription_short() {
+        return this.description_short;
+    }
+
+    public String getDescription() {
+        return this.description;
+    }
+
+    public int getPrep_time_min() {
+        return this.prep_time_min;
     }
 
     public int getUuid() {

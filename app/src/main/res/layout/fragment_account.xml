@@ -41,7 +41,7 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView2"
-        android:layout_width="330"
+        android:layout_width="330dp"
         android:layout_height="340dp"
         android:layout_marginBottom="32dp"
         app:layout_constraintBottom_toTopOf="@+id/button"
@@ -51,7 +51,7 @@
 
     <TextView
         android:id="@+id/textView3"
-        android:layout_width="330"
+        android:layout_width="330dp"
         android:layout_height="21dp"
         android:layout_marginBottom="4dp"
         android:text="Recepten van 'account naam'"

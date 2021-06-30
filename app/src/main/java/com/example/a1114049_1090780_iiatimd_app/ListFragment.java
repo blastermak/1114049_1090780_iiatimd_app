@@ -6,10 +6,22 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,7 +35,7 @@ public class ListFragment extends Fragment {
     private RecyclerView.Adapter recipeListRecyclerViewAdapter;
     private RecyclerView.LayoutManager layoutManager;
 
-    private List<Recipe> recipes;
+    private ArrayList<Recipe> myRecipes = new ArrayList<Recipe>();
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -73,10 +85,6 @@ public class ListFragment extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_list, container, false);
 
-
-
-
-
         return inflater.inflate(R.layout.fragment_list, container, false);
     }
 
@@ -87,29 +95,53 @@ public class ListFragment extends Fragment {
         layoutManager = new LinearLayoutManager(this.getContext());
         recipeListRecyclerView.setLayoutManager(layoutManager);
         recipeListRecyclerView.hasFixedSize();
-        final Recipe[] recipes = new Recipe[20];
-        recipes[0] = new Recipe(1, "Burger", "Lekkere burger");
-        recipes[1] = new Recipe(2, "Pasta", "Lekkere pasta");
-        recipes[2] = new Recipe(3, "Risotto", "Lekkere risotto");
-        recipes[3] = new Recipe(4, "Paella", "Lekkere paella");
-        recipes[4] = new Recipe(5, "Curry", "Lekkere curry");
-        recipes[5] = new Recipe(6, "Hutspot", "Lekkere hutspot");
-        recipes[6] = new Recipe(7, "Tomatensoep", "Lekkere tomatensoep");
-        recipes[7] = new Recipe(8, "Stroopwafelijs", "Lekker stroopwafelijs");
-        recipes[8] = new Recipe(9, "Luxe tosti", "Lekkere tosti");
-        recipes[9] = new Recipe(10, "Knoflookstokbrood", "Lekker knoflookstokbrood");
-        recipes[10] = new Recipe(11, "Burger", "Lekkere burger");
-        recipes[11] = new Recipe(12, "Pasta", "Lekkere pasta");
-        recipes[12] = new Recipe(13, "Risotto", "Lekkere risotto");
-        recipes[13] = new Recipe(14, "Paella", "Lekkere paella");
-        recipes[14] = new Recipe(15, "Curry", "Lekkere curry");
-        recipes[15] = new Recipe(16, "Hutspot", "Lekkere hutspot");
-        recipes[16] = new Recipe(17, "Tomatensoep", "Lekkere tomatensoep");
-        recipes[17] = new Recipe(18, "Stroopwafelijs", "Lekker stroopwafelijs");
-        recipes[18] = new Recipe(19, "Luxe tosti", "Lekkere tosti");
-        recipes[19] = new Recipe(20, "Knoflookstokbrood", "Lekker knoflookstokbrood");
 
-        recipeListRecyclerViewAdapter = new RecipeAdapter(recipes);
+        RequestQueue queue = VolleySingleton.getInstance(this.getActivity().getApplicationContext()).getRequestQueue();
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, "http://iiatimd.jimmak.nl/api/recipes/",null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    Log.d("gelukt", response.toString());
+                    JSONArray recipeData = response.getJSONArray("data");
+                    Log.d("recipejson", recipeData.toString());
+                    for (int i = 0; i < recipeData.length(); i++){
+                        myRecipes.add(new Recipe (
+                                recipeData.getJSONObject(i).getInt("id"),
+                                recipeData.getJSONObject(i).getString("title"),
+                                recipeData.getJSONObject(i).getString("description_short"),
+                                recipeData.getJSONObject(i).getString("description"),
+                                recipeData.getJSONObject(i).getInt("prep_time_min")
+                                )
+                        );
+                    }
+//                    myRecipes.add(new Recipe(   recipeData.getInt(0),
+//                                                recipeData.getString(1),
+//                                                recipeData.getString(2),
+//                                                recipeData.getString(3),
+//                                                recipeData.getInt(4)
+//                    ));
+                    recipeListRecyclerViewAdapter.notifyDataSetChanged();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+
+                Log.d("gefaald", error.getMessage());
+
+
+            }
+
+        });
+
+
+        VolleySingleton.getInstance(this.getActivity().getApplicationContext()).addToRequestQueue(jsonObjectRequest);
+
+        recipeListRecyclerViewAdapter = new RecipeAdapter(myRecipes);
         recipeListRecyclerView.setAdapter(recipeListRecyclerViewAdapter);
     }
 }

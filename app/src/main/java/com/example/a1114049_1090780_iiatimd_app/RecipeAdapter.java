@@ -11,16 +11,18 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
+
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder> {
 
-    private Recipe[] recipes;
+    private ArrayList<Recipe> recipes;
     private MyItemClickListener recipeOnClickListener;
 
 
     public interface MyItemClickListener {
         void onItemClick(View view, int position);
     }
-    public RecipeAdapter(Recipe[] recipes){
+    public RecipeAdapter(ArrayList<Recipe> recipes){
         this.recipes = recipes;
     }
 
@@ -60,13 +62,13 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
 
     @Override
     public void onBindViewHolder(@NonNull RecipeAdapter.RecipeViewHolder holder, int position){
-        holder.titleTextView.setText(recipes[position].getName());
-        holder.summaryTextView.setText(recipes[position].getSummary());
+        holder.titleTextView.setText(recipes.get(position).getTitle());
+        holder.summaryTextView.setText(recipes.get(position).getDescription_short());
     }
 
     @Override
     public int getItemCount(){
-        return recipes.length;
+        return recipes.size();
     }
 
     public void setOnItemClickListener(MyItemClickListener listener){
