@@ -35,7 +35,7 @@ public class ListFragment extends Fragment {
     private RecyclerView.Adapter recipeListRecyclerViewAdapter;
     private RecyclerView.LayoutManager layoutManager;
 
-    private ArrayList<Recipe> myRecipes = new ArrayList<Recipe>();
+    private ArrayList<Recipe> myRecipes = new ArrayList<>();
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -96,8 +96,6 @@ public class ListFragment extends Fragment {
         recipeListRecyclerView.setLayoutManager(layoutManager);
         recipeListRecyclerView.hasFixedSize();
 
-        RequestQueue queue = VolleySingleton.getInstance(this.getActivity().getApplicationContext()).getRequestQueue();
-
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, "http://iiatimd.jimmak.nl/api/recipes/",null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -115,12 +113,6 @@ public class ListFragment extends Fragment {
                                 )
                         );
                     }
-//                    myRecipes.add(new Recipe(   recipeData.getInt(0),
-//                                                recipeData.getString(1),
-//                                                recipeData.getString(2),
-//                                                recipeData.getString(3),
-//                                                recipeData.getInt(4)
-//                    ));
                     recipeListRecyclerViewAdapter.notifyDataSetChanged();
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -129,15 +121,10 @@ public class ListFragment extends Fragment {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
-
                 Log.d("gefaald", error.getMessage());
-
-
             }
 
         });
-
 
         VolleySingleton.getInstance(this.getActivity().getApplicationContext()).addToRequestQueue(jsonObjectRequest);
 
