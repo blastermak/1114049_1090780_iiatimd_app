@@ -17,7 +17,7 @@ public class MainActivity extends AppCompatActivity  {
 
     // Variable for the bottom navigation view
     private BottomNavigationView bottomNavigationView;
-
+    public String loginToken = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
