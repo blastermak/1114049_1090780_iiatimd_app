@@ -22,4 +22,13 @@
     <style name="Theme.1114049_1090780_iiatimd_app.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.1114049_1090780_iiatimd_app.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="Theme.1114049_1090780_iiatimd_app.NoActionBar.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.1114049_1090780_iiatimd_app.NoActionBar.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.1114049_1090780_iiatimd_app.NoActionBar.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>

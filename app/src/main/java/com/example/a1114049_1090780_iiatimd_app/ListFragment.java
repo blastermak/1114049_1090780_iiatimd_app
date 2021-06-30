@@ -1,5 +1,6 @@
 package com.example.a1114049_1090780_iiatimd_app;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -133,8 +134,12 @@ public class ListFragment extends Fragment  {
 
         recipeListRecyclerViewAdapter.setOnItemClickListener(new RecipeAdapter.recipeItemClickListener(){
             @Override
-            public void onItemClick(int position){
+            public void onItemClick(View v, int position){
                 Log.d("clicklistener", "clicked + " + String.valueOf(position));
+                Intent intent = new Intent (v.getContext(), recipeDetailActivity.class);
+                intent.putExtra("RECIPE_TITLE", myRecipes.get(position).getTitle());
+                intent.putExtra("RECIPE_DESCRIPTION", myRecipes.get(position).getDescription());
+                startActivity(intent);
             }
         });
     }

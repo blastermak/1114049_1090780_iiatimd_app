@@ -9,14 +9,11 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
-        android:usesCleartextTraffic="true"
         android:supportsRtl="true"
-        android:theme="@style/Theme.1114049_1090780_iiatimd_app.NoActionBar">
-        <activity android:name=".newRecipeActivity"></activity>
-        <activity
-            android:name=".recipeDetailActivity"
-            android:label="@string/title_activity_recipe_detail"
-            android:theme="@style/Theme.1114049_1090780_iiatimd_app.NoActionBar" />
+        android:theme="@style/Theme.1114049_1090780_iiatimd_app.NoActionBar"
+        android:usesCleartextTraffic="true">
+        <activity android:name=".recipeDetailActivity"></activity>
+        <activity android:name=".newRecipeActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
