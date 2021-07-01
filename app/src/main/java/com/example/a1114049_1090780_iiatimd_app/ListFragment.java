@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -37,6 +38,8 @@ public class ListFragment extends Fragment  {
     private RecyclerView.LayoutManager layoutManager;
 
     private ArrayList<Recipe> myRecipes = new ArrayList<>();
+
+    private RecipeViewModel recipeViewModel;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -97,38 +100,17 @@ public class ListFragment extends Fragment  {
         recipeListRecyclerView.setLayoutManager(layoutManager);
         recipeListRecyclerView.hasFixedSize();
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, "http://iiatimd.jimmak.nl/api/recipes/",null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    JSONArray recipeData = response.getJSONArray("data");
-                    for (int i = 0; i < recipeData.length(); i++){
-                        myRecipes.add(new Recipe (
-                                recipeData.getJSONObject(i).getInt("id"),
-                                recipeData.getJSONObject(i).getString("title"),
-                                recipeData.getJSONObject(i).getString("description_short"),
-                                recipeData.getJSONObject(i).getString("description"),
-                                recipeData.getJSONObject(i).getInt("prep_time_min")
-                                )
-                        );
-                    }
-                    recipeListRecyclerViewAdapter.notifyDataSetChanged();
-                } catch (JSONException e) {
-                    e.printStackTrace();
+        recipeViewModel = new ViewModelProvider(this).get(RecipeViewModel.class);
+        recipeViewModel.getAllRecipes().observe(getViewLifecycleOwner(), recipes -> {
+            for (int i = 0; i < recipes.size(); i++){
+                if (!myRecipes.contains(recipes.get(i))) {
+                    myRecipes.add(recipes.get(i));
+                    recipeListRecyclerViewAdapter.notifyItemInserted(myRecipes.size()-1);
                 }
             }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.d("gefaald", error.getMessage());
-            }
+            Log.d("recipesrecyclerview", recipes.toString());
 
         });
-
-
-        VolleySingleton.getInstance(this.getActivity().getApplicationContext()).addToRequestQueue(jsonObjectRequest);
-
-        insertIntoLocalDatabase();
 
         recipeListRecyclerViewAdapter = new RecipeAdapter(myRecipes);
         recipeListRecyclerView.setAdapter(recipeListRecyclerViewAdapter);
@@ -143,17 +125,9 @@ public class ListFragment extends Fragment  {
                 startActivity(intent);
             }
         });
+
+
+
     }
 
-    public void insertIntoLocalDatabase(){
-        AppDatabase db = AppDatabase.getInstance(this.getActivity().getApplicationContext());
-        for (int i = 0; i < myRecipes.size(); i++){
-            try {
-                db.recipeDAO().InsertRecipe(myRecipes.get(i));
-                Log.d("insertAllRecipes", "Recipe " + myRecipes.get(i).getTitle() + " inserted in db");
-            } catch (Exception e){
-                Log.d("insertAllRecipes", "Recipe " + myRecipes.get(i).getTitle() + " already exists in db");
-            }
-        }
-    }
 }

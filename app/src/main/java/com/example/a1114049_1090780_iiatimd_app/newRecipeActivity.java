@@ -1,6 +1,7 @@
 package com.example.a1114049_1090780_iiatimd_app;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -46,6 +47,8 @@ public class newRecipeActivity extends AppCompatActivity {
 
     private boolean formValidated = false;
 
+    private RecipeViewModel recipeViewModel;
+
     private AppDatabase db;
 
 
@@ -65,7 +68,9 @@ public class newRecipeActivity extends AppCompatActivity {
 
         recipeSubmitButton.setOnClickListener(this::newRecipeSubmitHandler);
 
-        db = AppDatabase.getInstance(newRecipeActivity.this);
+        db = AppDatabase.getDatabase(newRecipeActivity.this);
+
+        recipeViewModel = new ViewModelProvider(this).get(RecipeViewModel.class);
 
     }
 
@@ -113,7 +118,8 @@ public class newRecipeActivity extends AppCompatActivity {
                         Log.i("VOLLEY", String.valueOf(response));
                         try {
                             jsonResponse[0] = response.getJSONObject("data");
-                            db.recipeDAO().InsertRecipe(
+//                            db.recipeDAO().InsertRecipe(
+                            recipeViewModel.insert(
                                     new Recipe(
                                             jsonResponse[0].getInt("id"),
                                             jsonResponse[0].getString("title"),

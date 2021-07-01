@@ -12,10 +12,11 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder>  {
 
-    private ArrayList<Recipe> recipes;
+    private List<Recipe> recipes;
     private recipeItemClickListener recipeOnClickListener;
 
     public interface recipeItemClickListener {
@@ -26,7 +27,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         recipeOnClickListener = listener;
     }
 
-    public RecipeAdapter(ArrayList<Recipe> recipes){
+    public RecipeAdapter(List<Recipe> recipes){
         this.recipes = recipes;
     }
 

@@ -12,6 +12,13 @@ import android.widget.TextView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import com.google.android.material.textfield.TextInputLayout;
+
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+
 public class recipeDetailActivity extends AppCompatActivity {
 
     private TextView recipeTitleTextView;
@@ -22,7 +29,7 @@ public class recipeDetailActivity extends AppCompatActivity {
 
     private FloatingActionButton fab;
 
-
+    private Recipe detailRecipe;
     private AppDatabase db;
 
 
@@ -44,10 +51,11 @@ public class recipeDetailActivity extends AppCompatActivity {
         fab = findViewById(R.id.editRecipeButton);
         fab.setOnClickListener(this::actionButtonOnClick);
 
-        db = AppDatabase.getInstance(recipeDetailActivity.this);
+        db = AppDatabase.getDatabase(recipeDetailActivity.this);
 
         Intent intent = getIntent();
         int detailRecipeid = intent.getIntExtra("RECIPE_ID", 0);
+
         String detailRecipeTitle = intent.getStringExtra("RECIPE_TITLE");
         String detailRecipeDescriptionShort = intent.getStringExtra("RECIPE_DESCRIPTION_SHORT");
         String detailRecipeDescription = intent.getStringExtra("RECIPE_DESCRIPTION");

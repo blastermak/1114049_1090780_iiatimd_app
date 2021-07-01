@@ -18,16 +18,19 @@ import io.reactivex.Flowable;
 public interface RecipeDAO {
 
     @Query("SELECT * FROM recipe")
-    public Flowable<List<Recipe>> getRecipe();
+    LiveData<List<Recipe>> getRecipe();
 
     @Query("SELECT * FROM recipe WHERE uuid = :id")
-    public Flowable<Recipe> getRecipeById(int id);
+    LiveData<Recipe> getRecipeById(int id);
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    public Completable InsertRecipe(Recipe recipe);
+//    @Insert(onConflict = OnConflictStrategy.REPLACE)
+//    public Completable InsertRecipe(Recipe recipe);
 
     @Insert()
     void insertAllRecipes(Recipe... recipes);
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    void insertRecipe(Recipe recipe);
 
     @Delete
     void deleteRecipe(Recipe recipe);
