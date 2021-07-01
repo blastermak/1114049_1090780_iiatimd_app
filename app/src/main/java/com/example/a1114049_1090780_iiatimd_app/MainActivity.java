@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
         openFragment(HomeFragment.newInstance("","" ));
 
-        fab = findViewById(R.id.actionButton);
+        fab = findViewById(R.id.addRecipeActionButton);
         fab.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){

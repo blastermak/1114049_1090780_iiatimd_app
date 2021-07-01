@@ -4,19 +4,27 @@ import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
 import java.util.List;
+
+import io.reactivex.Completable;
+import io.reactivex.Flowable;
+
 
 
 @Dao
 public interface RecipeDAO {
 
     @Query("SELECT * FROM recipe")
-    public LiveData<List<Recipe>> getAllRecipes();
+    public Flowable<List<Recipe>> getRecipe();
 
-    @Insert()
-    void InsertRecipe(Recipe recipe);
+    @Query("SELECT * FROM recipe WHERE uuid = :id")
+    public Flowable<Recipe> getRecipeById(int id);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    public Completable InsertRecipe(Recipe recipe);
 
     @Insert()
     void insertAllRecipes(Recipe... recipes);
