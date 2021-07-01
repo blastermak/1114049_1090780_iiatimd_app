@@ -101,9 +101,7 @@ public class ListFragment extends Fragment  {
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    Log.d("gelukt", response.toString());
                     JSONArray recipeData = response.getJSONArray("data");
-                    Log.d("recipejson", recipeData.toString());
                     for (int i = 0; i < recipeData.length(); i++){
                         myRecipes.add(new Recipe (
                                 recipeData.getJSONObject(i).getInt("id"),
@@ -127,7 +125,10 @@ public class ListFragment extends Fragment  {
 
         });
 
+
         VolleySingleton.getInstance(this.getActivity().getApplicationContext()).addToRequestQueue(jsonObjectRequest);
+
+        insertIntoLocalDatabase();
 
         recipeListRecyclerViewAdapter = new RecipeAdapter(myRecipes);
         recipeListRecyclerView.setAdapter(recipeListRecyclerViewAdapter);
@@ -142,5 +143,17 @@ public class ListFragment extends Fragment  {
                 startActivity(intent);
             }
         });
+    }
+
+    public void insertIntoLocalDatabase(){
+        AppDatabase db = AppDatabase.getInstance(this.getActivity().getApplicationContext());
+        for (int i = 0; i < myRecipes.size(); i++){
+            try {
+                db.recipeDAO().InsertRecipe(myRecipes.get(i));
+                Log.d("insertAllRecipes", "Recipe " + myRecipes.get(i).getTitle() + " inserted in db");
+            } catch (Exception e){
+                Log.d("insertAllRecipes", "Recipe " + myRecipes.get(i).getTitle() + " already exists in db");
+            }
+        }
     }
 }
