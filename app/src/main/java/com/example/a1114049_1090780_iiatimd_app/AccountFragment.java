@@ -1,5 +1,6 @@
 package com.example.a1114049_1090780_iiatimd_app;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -17,8 +18,6 @@ import android.widget.Button;
  * create an instance of this fragment.
  */
 public class AccountFragment extends Fragment {
-
-
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -66,28 +65,38 @@ public class AccountFragment extends Fragment {
         Button registerButton = view.findViewById(R.id.registerProfileButton);
         Button loginButton = view.findViewById(R.id.loginProfileButton);
 
-        registerButton.setOnClickListener(this::openRegisterFragment);
-        loginButton.setOnClickListener(this::openLoginFragment);
+        registerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(view.getContext(), RegisterActivity.class));
+            }
+        });
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(view.getContext(), LoginActivity.class));
+            }
+        });
 
         // Inflate the layout for this fragment
         return view;
     }
 
-    private void openLoginFragment(View view) {
-        Log.d("openFragment", "login Fragment");
-        Fragment fragment = new LoginFragment();
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragmentContainer, fragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
-    }
-
-    public void openRegisterFragment(View view) {
-        Log.d("openFragment", "register Fragment");
-        Fragment fragment = new RegisterFragment();
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragmentContainer, fragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
-    }
+//    private void openLoginFragment(View view) {
+//        Log.d("openFragment", "login Fragment");
+//        Fragment fragment = new LoginFragment();
+//        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+//        transaction.replace(R.id.fragmentContainer, fragment);
+//        transaction.addToBackStack(null);
+//        transaction.commit();
+//    }
+//
+//    public void openRegisterFragment(View view) {
+//        Log.d("openFragment", "register Fragment");
+//        Fragment fragment = new RegisterFragment();
+//        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+//        transaction.replace(R.id.fragmentContainer, fragment);
+//        transaction.addToBackStack(null);
+//        transaction.commit();
+//    }
 }

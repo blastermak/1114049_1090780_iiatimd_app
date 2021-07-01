@@ -1,16 +1,15 @@
 package com.example.a1114049_1090780_iiatimd_app;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
@@ -18,7 +17,6 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -26,37 +24,28 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
+public class RegisterActivity extends AppCompatActivity {
 
-public class RegisterFragment extends Fragment {
-
-    final String database_url = "http://10.0.2.2:8000/api/register";
-    //    final String database_url = "https://iiatimd.jimmak.nl/api";
+    boolean authenticating;
+    String database_url = "http://10.0.2.2:8000/api/register";
     RequestQueue queue;
-    String errorMessage;
-    private boolean authenticating = false;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_register);
 
-        queue = Volley.newRequestQueue(getActivity().getApplicationContext());
-    }
+        queue = Volley.newRequestQueue(getApplicationContext());
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_register, container, false);
+        EditText userFullName = findViewById(R.id.inputFullName);
+        EditText userEmail = findViewById(R.id.inputRegisterEmail);
+        EditText userPassword = findViewById(R.id.inputRegisterPassword);
+        EditText userConfirmPassword = findViewById(R.id.inputRegisterConfirmPassword);
 
-        EditText userFullName = view.findViewById(R.id.inputFullName);
-        EditText userEmail = view.findViewById(R.id.inputEmail);
-        EditText userPassword = view.findViewById(R.id.inputPassword);
-        EditText userConfirmPassword = view.findViewById(R.id.inputConfirmPassword);
-
-        Button backToAccountButton = view.findViewById(R.id.backToAccountButton);
-        Button registerButton = view.findViewById(R.id.registerButton);
+        Button backToAccountButton = findViewById(R.id.backToAccountButton);
+        Button registerButton = findViewById(R.id.registerButton);
 
         backToAccountButton.setOnClickListener(this::toAccountFragment);
-
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -64,19 +53,9 @@ public class RegisterFragment extends Fragment {
             }
         });
 
-        return view;
     }
 
-    public void toAccountFragment(View view) {
-        Fragment accountFragment = new AccountFragment();
-        FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragmentContainer, accountFragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
-    }
-
-    public void register(String username, String email, String password, String confirmPassword) {
-        Log.d("buttonClick", "Register button clicked");
+    private void register(String username, String email, String password, String confirmPassword) {
         boolean formIsValid = false;
 
         if (!username.isEmpty() && !email.isEmpty() && email.contains("@") && !password.isEmpty() && !confirmPassword.isEmpty() && password.equals(confirmPassword)) {
@@ -99,7 +78,7 @@ public class RegisterFragment extends Fragment {
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.d("heeftNietGewerkt", error.getMessage());
+                        Log.d("VolleyError", error.getMessage());
                     }
                 }) {
                     @Override
@@ -125,13 +104,21 @@ public class RegisterFragment extends Fragment {
 
                 queue.add(stringRequest);
                 authenticating = false;
-                Toast.makeText(getActivity().getApplicationContext(), "Succesvol geregistreerd", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Succesvol geregistreerd", Toast.LENGTH_SHORT).show();
             } catch (JSONException e) {
                 Log.d("VolleyError", String.valueOf(e));
             }
 
         } else {
-            Toast.makeText(getActivity().getApplicationContext(), "Verkeerde informatie ingevuld", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Verkeerde informatie ingevuld", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public void toAccountFragment(View view) {
+        Fragment accountFragment = new AccountFragment();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragmentContainer, accountFragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 }
