@@ -8,6 +8,7 @@ import java.util.List;
 public class RecipeRepository {
 
     private RecipeDAO recipeDAO;
+    private LiveData<Recipe> recipeById;
     private LiveData<List<Recipe>> allRecipes;
 
     RecipeRepository(Application app){
@@ -19,10 +20,21 @@ public class RecipeRepository {
     LiveData<List<Recipe>> getAllRecipes(){
         return allRecipes;
     }
+    LiveData<Recipe> getRecipeById(int recipeId){
+        return recipeDAO.getRecipeById(recipeId);
+    }
 
     void insert(Recipe recipe){
         AppDatabase.databaseWriterExecutor.execute(() -> {
             recipeDAO.insertRecipe(recipe);
         });
     }
+
+    void update(Recipe recipe){
+        AppDatabase.databaseWriterExecutor.execute(() -> {
+            recipeDAO.updateRecipe(recipe);
+        });
+    }
+
+
 }

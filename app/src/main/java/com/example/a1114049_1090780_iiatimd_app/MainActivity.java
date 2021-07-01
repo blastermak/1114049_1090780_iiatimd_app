@@ -35,12 +35,6 @@ public class MainActivity extends AppCompatActivity {
 
     private FloatingActionButton fab;
 
-    private RecyclerView recipeListRecyclerView;
-    private RecipeAdapter recipeListRecyclerViewAdapter;
-    private RecyclerView.LayoutManager layoutManager;
-
-    private ArrayList<Recipe> myRecipes = new ArrayList<>();
-
     private RecipeViewModel recipeViewModel;
 
     @Override
@@ -79,8 +73,6 @@ public class MainActivity extends AppCompatActivity {
                                         recipeData.getJSONObject(i).getInt("prep_time_min")
                                 );
                         recipeViewModel.insert(recipe);
-
-
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -93,7 +85,6 @@ public class MainActivity extends AppCompatActivity {
             }
 
         });
-
 
         VolleySingleton.getInstance(this.getApplicationContext()).addToRequestQueue(jsonObjectRequest);
 

@@ -86,9 +86,6 @@ public class ListFragment extends Fragment  {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-
-        View rootView = inflater.inflate(R.layout.fragment_list, container, false);
-
         return inflater.inflate(R.layout.fragment_list, container, false);
     }
 
@@ -108,8 +105,6 @@ public class ListFragment extends Fragment  {
                     recipeListRecyclerViewAdapter.notifyItemInserted(myRecipes.size()-1);
                 }
             }
-            Log.d("recipesrecyclerview", recipes.toString());
-
         });
 
         recipeListRecyclerViewAdapter = new RecipeAdapter(myRecipes);
@@ -118,10 +113,8 @@ public class ListFragment extends Fragment  {
         recipeListRecyclerViewAdapter.setOnItemClickListener(new RecipeAdapter.recipeItemClickListener(){
             @Override
             public void onItemClick(View v, int position){
-                Log.d("clicklistener", "clicked + " + String.valueOf(position));
                 Intent intent = new Intent (v.getContext(), recipeDetailActivity.class);
-                intent.putExtra("RECIPE_TITLE", myRecipes.get(position).getTitle());
-                intent.putExtra("RECIPE_DESCRIPTION", myRecipes.get(position).getDescription());
+                intent.putExtra("RECIPE_ID", myRecipes.get(position).getUuid());
                 startActivity(intent);
             }
         });

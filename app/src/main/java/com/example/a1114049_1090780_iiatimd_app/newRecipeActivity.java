@@ -118,7 +118,6 @@ public class newRecipeActivity extends AppCompatActivity {
                         Log.i("VOLLEY", String.valueOf(response));
                         try {
                             jsonResponse[0] = response.getJSONObject("data");
-//                            db.recipeDAO().InsertRecipe(
                             recipeViewModel.insert(
                                     new Recipe(
                                             jsonResponse[0].getInt("id"),
@@ -130,10 +129,6 @@ public class newRecipeActivity extends AppCompatActivity {
                             Intent intent = new Intent(newRecipeActivity.this, recipeDetailActivity.class);
                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             intent.putExtra("RECIPE_ID", jsonResponse[0].getInt("id"));
-                            intent.putExtra("RECIPE_TITLE", jsonResponse[0].getString("title"));
-                            intent.putExtra("RECIPE_DESCRIPTION_SHORT", jsonResponse[0].getString("description_short"));
-                            intent.putExtra("RECIPE_DESCRIPTION", jsonResponse[0].getString("description"));
-                            intent.putExtra("RECIPE_PREP_TIME_MIN", jsonResponse[0].getInt("prep_time_min"));
                             // Finish is needed so that we don't see the new recipe screen when pressing back
                             finish();
                             startActivity(intent);

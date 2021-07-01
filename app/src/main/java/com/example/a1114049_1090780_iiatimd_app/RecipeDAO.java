@@ -6,6 +6,7 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import java.util.List;
 
@@ -23,14 +24,14 @@ public interface RecipeDAO {
     @Query("SELECT * FROM recipe WHERE uuid = :id")
     LiveData<Recipe> getRecipeById(int id);
 
-//    @Insert(onConflict = OnConflictStrategy.REPLACE)
-//    public Completable InsertRecipe(Recipe recipe);
-
     @Insert()
     void insertAllRecipes(Recipe... recipes);
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insertRecipe(Recipe recipe);
+
+    @Update
+    void updateRecipe(Recipe recipe);
 
     @Delete
     void deleteRecipe(Recipe recipe);

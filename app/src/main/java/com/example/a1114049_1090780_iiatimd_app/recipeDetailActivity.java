@@ -1,6 +1,7 @@
 package com.example.a1114049_1090780_iiatimd_app;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.concurrent.Callable;
@@ -26,11 +28,13 @@ public class recipeDetailActivity extends AppCompatActivity {
 
     private TextInputLayout editRecipeTitleLayout;
     private TextInputLayout editRecipeDescriptionLayout;
+    private TextInputEditText editRecipeTitleText;
+    private TextInputEditText editRecipeDescriptionText;
 
     private FloatingActionButton fab;
 
-    private Recipe detailRecipe;
-    private AppDatabase db;
+    private RecipeViewModel recipeViewModel;
+    private Recipe recipeDetail;
 
 
     private boolean editing = false;
@@ -47,25 +51,27 @@ public class recipeDetailActivity extends AppCompatActivity {
 
         editRecipeTitleLayout = findViewById(R.id.editRecipeTitleTextLayout);
         editRecipeDescriptionLayout = findViewById(R.id.editRecipeDescriptionTextLayout);
+        editRecipeTitleText = findViewById(R.id.editRecipeTitleTextEdit);
+        editRecipeDescriptionText = findViewById(R.id.editRecipeDescriptionEdit);
 
         fab = findViewById(R.id.editRecipeButton);
         fab.setOnClickListener(this::actionButtonOnClick);
 
-        db = AppDatabase.getDatabase(recipeDetailActivity.this);
+        recipeViewModel = new ViewModelProvider(this).get(RecipeViewModel.class);
 
         Intent intent = getIntent();
         int detailRecipeid = intent.getIntExtra("RECIPE_ID", 0);
 
-        String detailRecipeTitle = intent.getStringExtra("RECIPE_TITLE");
-        String detailRecipeDescriptionShort = intent.getStringExtra("RECIPE_DESCRIPTION_SHORT");
-        String detailRecipeDescription = intent.getStringExtra("RECIPE_DESCRIPTION");
-        int detailRecipePrepTimeMin = intent.getIntExtra("RECIPE_PREP_TIME_MIN", 0);
+        recipeViewModel.getRecipeById(detailRecipeid).observe(this, recipe -> {
+//            Log.d("recipedatail", recipe.toString());
+            recipeDetail = recipe;
+            recipeTitleTextView.setText(recipe.getTitle());
 
-        recipeTitleTextView.setText(detailRecipeTitle);
-        recipeDescriptionTextView.setText(detailRecipeDescription);
+            recipeDescriptionTextView.setText(recipe.getDescription());
+
+        });
 
     }
-
 
     public void actionButtonOnClick(View v){
         if (editing){
@@ -74,6 +80,11 @@ public class recipeDetailActivity extends AppCompatActivity {
             editRecipeTitleLayout.setVisibility(View.GONE);
             editRecipeDescriptionLayout.setVisibility(View.GONE);
 
+            recipeDetail.setTitle(editRecipeTitleText.getText().toString());
+            recipeDetail.setDescription(editRecipeDescriptionText.getText().toString());
+
+            recipeViewModel.update(recipeDetail);
+
             fab.setImageResource(R.drawable.ic_baseline_edit_24);
             editing = false;
         } else {
@@ -81,6 +92,10 @@ public class recipeDetailActivity extends AppCompatActivity {
             recipeDescriptionTextView.setVisibility(View.GONE);
             editRecipeTitleLayout.setVisibility(View.VISIBLE);
             editRecipeDescriptionLayout.setVisibility(View.VISIBLE);
+
+            editRecipeTitleText.setText(recipeDetail.getTitle());
+            editRecipeDescriptionText.setText(recipeDetail.getDescription());
+
 
             fab.setImageResource(R.drawable.ic_baseline_check_24);
             editing = true;
