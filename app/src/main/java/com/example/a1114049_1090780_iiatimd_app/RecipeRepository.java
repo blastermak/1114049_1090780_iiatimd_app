@@ -8,8 +8,9 @@ import java.util.List;
 public class RecipeRepository {
 
     private RecipeDAO recipeDAO;
-    private LiveData<Recipe> recipeById;
+
     private LiveData<List<Recipe>> allRecipes;
+    private LiveData<List<RecipeWithInstructions>> allRecipesWithInstructions;
 
     RecipeRepository(Application app){
         AppDatabase db = AppDatabase.getDatabase(app);
@@ -24,15 +25,25 @@ public class RecipeRepository {
         return recipeDAO.getRecipeById(recipeId);
     }
 
-    void insert(Recipe recipe){
+    void insertRecipe(Recipe recipe){
         AppDatabase.databaseWriterExecutor.execute(() -> {
             recipeDAO.insertRecipe(recipe);
         });
     }
 
-    void update(Recipe recipe){
+    void updateRecipe(Recipe recipe){
         AppDatabase.databaseWriterExecutor.execute(() -> {
             recipeDAO.updateRecipe(recipe);
+        });
+    }
+
+    LiveData<RecipeWithInstructions> getRecipesWithInstructions(int recipeId){
+        return recipeDAO.getRecipesWithInstructions(recipeId);
+    }
+
+    void insertInstruction(Instruction instruction){
+        AppDatabase.databaseWriterExecutor.execute(() -> {
+            recipeDAO.insertInstruction(instruction);
         });
     }
 

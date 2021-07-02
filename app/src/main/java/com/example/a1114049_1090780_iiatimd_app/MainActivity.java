@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, "http://iiatimd.jimmak.nl/api/recipes/",null, new Response.Listener<JSONObject>() {
+        JsonObjectRequest recipeJsonObjectRequest = new JsonObjectRequest(Request.Method.GET, "http://iiatimd.jimmak.nl/api/recipes/",null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
                                         recipeData.getJSONObject(i).getString("description"),
                                         recipeData.getJSONObject(i).getInt("prep_time_min")
                                 );
-                        recipeViewModel.insert(recipe);
+                        recipeViewModel.insertRecipe(recipe);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -83,10 +83,36 @@ public class MainActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 Log.d("gefaald", error.getMessage());
             }
-
         });
 
-        VolleySingleton.getInstance(this.getApplicationContext()).addToRequestQueue(jsonObjectRequest);
+        JsonObjectRequest instructionsJsonObjectRequest = new JsonObjectRequest(Request.Method.GET, "http://iiatimd.jimmak.nl/api/instructions/",null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    JSONArray instructionData = response.getJSONArray("data");
+                    for (int i = 0; i < instructionData.length(); i++){
+                        Log.d("first fetch of data", instructionData.get(i).toString());
+                        Instruction instruction = new Instruction (
+                                instructionData.getJSONObject(i).getInt("id"),
+                                instructionData.getJSONObject(i).getInt("recipe_id"),
+                                instructionData.getJSONObject(i).getInt("step_number"),
+                                instructionData.getJSONObject(i).getString("description")
+                        );
+                        recipeViewModel.insertInstruction(instruction);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("gefaald", error.getMessage());
+            }
+        });
+
+        VolleySingleton.getInstance(this.getApplicationContext()).addToRequestQueue(recipeJsonObjectRequest);
+        VolleySingleton.getInstance(this.getApplicationContext()).addToRequestQueue(instructionsJsonObjectRequest);
 
     }
 

@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+
 @Entity
 public class Recipe {
 
@@ -59,6 +60,4 @@ public class Recipe {
     public void setDescription(String description) { this.description = description; }
 
     public void setPrep_time_min(int prep_time_min) { this.prep_time_min = prep_time_min; }
-
-
 }

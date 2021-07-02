@@ -3,15 +3,12 @@ package com.example.a1114049_1090780_iiatimd_app;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder>  {
@@ -39,8 +36,8 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
 
         public RecipeViewHolder(View v, recipeItemClickListener listener){
             super(v);
-            titleTextView = v.findViewById(R.id.recipeCardName);
-            summaryTextView = v.findViewById(R.id.recipeCardSummary);
+            titleTextView = v.findViewById(R.id.instructionStepNumber);
+            summaryTextView = v.findViewById(R.id.instructionDescription);
             recipeCardView = v.findViewById(R.id.recipeCard);
             v.setOnClickListener(new View.OnClickListener() {
                 @Override

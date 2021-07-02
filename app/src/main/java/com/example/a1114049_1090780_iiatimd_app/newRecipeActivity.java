@@ -118,7 +118,7 @@ public class newRecipeActivity extends AppCompatActivity {
                         Log.i("VOLLEY", String.valueOf(response));
                         try {
                             jsonResponse[0] = response.getJSONObject("data");
-                            recipeViewModel.insert(
+                            recipeViewModel.insertRecipe(
                                     new Recipe(
                                             jsonResponse[0].getInt("id"),
                                             jsonResponse[0].getString("title"),

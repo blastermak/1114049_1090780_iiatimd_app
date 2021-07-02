@@ -13,11 +13,14 @@ public class RecipeViewModel extends AndroidViewModel {
 //    private final LiveData<Recipe> recipeById;
     private final LiveData<List<Recipe>> allRecipes;
 
+//    private final LiveData<List<RecipeWithInstructions>> allRecipesWithInstructions;
+
 
     public RecipeViewModel (Application app){
         super(app);
         recipeRepository = new RecipeRepository(app);
         allRecipes = recipeRepository.getAllRecipes();
+//        allRecipesWithInstructions = recipeRepository.getRecipesWithInstructions();
     }
 
     LiveData<Recipe> getRecipeById(int recipeId) {
@@ -26,9 +29,18 @@ public class RecipeViewModel extends AndroidViewModel {
 
     LiveData<List<Recipe>> getAllRecipes() { return allRecipes; }
 
-    public void insert(Recipe recipe){ recipeRepository.insert(recipe); }
+    public void insertRecipe(Recipe recipe){ recipeRepository.insertRecipe(recipe); }
 
-    public void update(Recipe recipe){ recipeRepository.update(recipe); }
+    public void updateRecipe(Recipe recipe){ recipeRepository.updateRecipe(recipe); }
+
+    LiveData<RecipeWithInstructions> getRecipesWithInstructions(int recipeId){
+        return recipeRepository.getRecipesWithInstructions(recipeId);
+    }
+
+    public void insertInstruction(Instruction instruction){
+        recipeRepository.insertInstruction(instruction);
+    }
+
 
 
 
