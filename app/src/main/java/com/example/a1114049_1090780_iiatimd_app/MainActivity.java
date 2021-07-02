@@ -111,8 +111,35 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        JsonObjectRequest ingredientsJsonObjectRequest = new JsonObjectRequest(Request.Method.GET, "http://iiatimd.jimmak.nl/api/ingredients/",null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    JSONArray ingredientsData = response.getJSONArray("data");
+                    for (int i = 0; i < ingredientsData.length(); i++){
+                        Log.d("first fetch of data", ingredientsData.get(i).toString());
+                        Ingredient ingredient = new Ingredient (
+                                ingredientsData.getJSONObject(i).getInt("id"),
+                                ingredientsData.getJSONObject(i).getInt("recipe_id"),
+                                ingredientsData.getJSONObject(i).getString("name"),
+                                ingredientsData.getJSONObject(i).getString("amount")
+                        );
+                        recipeViewModel.insertIngredient(ingredient);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("gefaald", error.getMessage());
+            }
+        });
+
         VolleySingleton.getInstance(this.getApplicationContext()).addToRequestQueue(recipeJsonObjectRequest);
         VolleySingleton.getInstance(this.getApplicationContext()).addToRequestQueue(instructionsJsonObjectRequest);
+        VolleySingleton.getInstance(this.getApplicationContext()).addToRequestQueue(ingredientsJsonObjectRequest);
 
     }
 

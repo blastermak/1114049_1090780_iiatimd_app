@@ -15,7 +15,7 @@ import java.util.concurrent.Executors;
 
 
 
-@Database(entities = {Recipe.class, Instruction.class}, version = 3)
+@Database(entities = {Recipe.class, Instruction.class, Ingredient.class}, version = 4)
 public abstract class AppDatabase extends RoomDatabase {
 
     public abstract RecipeDAO recipeDAO();
@@ -37,6 +37,12 @@ public abstract class AppDatabase extends RoomDatabase {
             database.execSQL("ALTER TABLE 'Instruction' ADD `recipe_id` INTEGER DEFAULT 1 NOT NULL");
         }
     };
+    static final Migration MIGRATION_3_4 = new Migration(3,4) {
+        @Override
+        public void migrate(SupportSQLiteDatabase database){
+            database.execSQL("CREATE TABLE 'Ingredient' (`uuid` INTEGER NOT NULL, `recipe_id` INTEGER NOT NULL, `name` TEXT ,`amount` TEXT , PRIMARY KEY(`uuid`))");
+        }
+    };
 
     static AppDatabase getDatabase(final Context context){
         if (instance == null){
@@ -44,7 +50,7 @@ public abstract class AppDatabase extends RoomDatabase {
                 if (instance == null){
                     instance = Room.databaseBuilder(context.getApplicationContext(),
                             AppDatabase.class, "recipe_database")
-                            .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
+                            .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4)
                             .build();
                 }
             }

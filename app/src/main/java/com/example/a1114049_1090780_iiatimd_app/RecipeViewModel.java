@@ -41,6 +41,14 @@ public class RecipeViewModel extends AndroidViewModel {
         recipeRepository.insertInstruction(instruction);
     }
 
+    LiveData<RecipeWithIngredients> getRecipesWithIngredients(int recipeId){
+        return recipeRepository.getRecipesWithIngredients(recipeId);
+    }
+
+    public void insertIngredient(Ingredient ingredient){
+        recipeRepository.insertIngredient(ingredient);
+    }
+
 
 
 

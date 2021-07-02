@@ -38,4 +38,11 @@ public interface RecipeDAO {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insertInstruction(Instruction instruction);
+
+    @Transaction
+    @Query("SELECT * FROM recipe WHERE uuid = :id")
+    LiveData<RecipeWithIngredients> getRecipesWithIngredients(int id);
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    void insertIngredient(Ingredient ingredient);
 }

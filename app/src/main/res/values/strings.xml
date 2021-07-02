@@ -39,4 +39,7 @@
     <!--    String pertaining to instructions card-->
     <string name="instructionStepPrefix">Stap</string>
     <string name="instructionsHeader">Instructies</string>
+
+    <!--    String pertaining to ingredients card-->
+    <string name="ingredientsHeader">Ingrediënten</string>
 </resources>

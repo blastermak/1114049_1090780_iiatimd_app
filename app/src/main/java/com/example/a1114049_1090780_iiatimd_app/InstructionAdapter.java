@@ -26,7 +26,7 @@ public class InstructionAdapter extends RecyclerView.Adapter<InstructionAdapter.
         public InstructionViewHolder(View v){
             super(v);
 
-            descriptionTextView = v.findViewById(R.id.instructionDescription);
+            descriptionTextView = v.findViewById(R.id.ingredientName);
         }
     }
 
