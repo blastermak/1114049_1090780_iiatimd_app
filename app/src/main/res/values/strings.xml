@@ -11,6 +11,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="register_profile_button">Register</string>
     <string name="login_profile_button">Login</string>
-    <string name="account_naam">Account naam</string>
+    <string name="account_naam">Welkom!</string>
     <string name="recepten_van_account_naam">Recepten van \'account naam\'</string>
+    <string name="no_account">Je bent op dit moment niet ingelogd. Klik op een van de knoppen om in te loggen of een account aan te maken.</string>
 </resources>

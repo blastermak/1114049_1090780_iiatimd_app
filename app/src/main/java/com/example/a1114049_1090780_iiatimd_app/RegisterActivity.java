@@ -4,7 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -18,6 +21,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
@@ -45,7 +49,12 @@ public class RegisterActivity extends AppCompatActivity {
         Button backToAccountButton = findViewById(R.id.backToAccountButton);
         Button registerButton = findViewById(R.id.registerButton);
 
-        backToAccountButton.setOnClickListener(this::toAccountFragment);
+        backToAccountButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openAccountView();
+            }
+        });
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -66,59 +75,40 @@ public class RegisterActivity extends AppCompatActivity {
             try {
                 authenticating = true;
                 JSONObject jsonBody = new JSONObject();
-                jsonBody.put("name", username);
+//                jsonBody.put("name", username);
                 jsonBody.put("email", email);
                 jsonBody.put("password", password);
-                final String requestBody = jsonBody.toString();
-                StringRequest stringRequest = new StringRequest(Request.Method.POST, database_url, new Response.Listener<String>() {
+
+                final JSONObject[] jsonResponse = {new JSONObject()};
+
+                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, database_url, jsonBody, new Response.Listener<JSONObject>() {
                     @Override
-                    public void onResponse(String response) {
-                        Log.d("Volley", response);
+                    public void onResponse(JSONObject response) {
+                        Log.d("Volley", response.toString());
+                        try {
+                            jsonResponse[0] = response.getJSONObject("data");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        openAccountView();
                     }
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.d("VolleyError", error.getMessage());
+                        Log.d("Volley Error", error.getMessage());
                     }
-                }) {
-                    @Override
-                    public String getBodyContentType() {
-                        return "application/json; charset=utf-8";
-                    }
-
-                    @Override
-                    public byte[] getBody() throws AuthFailureError {
-                        return requestBody.getBytes();
-                    }
-
-                    @Override
-                    protected Response<String> parseNetworkResponse(NetworkResponse response) {
-                        String responseString = "";
-                        if (response != null) {
-                            responseString = String.valueOf(response.statusCode);
-                            Log.d("VolleyResponse", String.valueOf(response.data));
-                        }
-                        return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
-                    }
-                };
-
-                queue.add(stringRequest);
+                });
+                queue.add(jsonObjectRequest);
                 authenticating = false;
-                Toast.makeText(getApplicationContext(), "Succesvol geregistreerd", Toast.LENGTH_SHORT).show();
             } catch (JSONException e) {
-                Log.d("VolleyError", String.valueOf(e));
+                e.printStackTrace();
             }
-
-        } else {
-            Toast.makeText(getApplicationContext(), "Verkeerde informatie ingevuld", Toast.LENGTH_SHORT).show();
         }
     }
 
-    public void toAccountFragment(View view) {
-        Fragment accountFragment = new AccountFragment();
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragmentContainer, accountFragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
+    public void openAccountView() {
+        Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+        intent.putExtra("fragmentToLoad", "AccountFragment");
+        startActivity(intent);
     }
 }

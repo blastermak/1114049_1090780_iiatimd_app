@@ -7,7 +7,10 @@ import androidx.fragment.app.FragmentTransaction;
 
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -30,7 +33,9 @@ public class MainActivity extends AppCompatActivity  {
         bottomNavigationView = findViewById(R.id.bottomNavigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
         openFragment(HomeFragment.newInstance("","" ));
-
+        if (getIntent().getExtras() != null) {
+            openSpecificFragment();
+        }
     }
 
     // Method for opening fragment in the correct container
@@ -57,10 +62,27 @@ public class MainActivity extends AppCompatActivity  {
                         openFragment(SearchFragment.newInstance("",""));
                         return true;
                     case R.id.bottom_menu_page_account:
-                        openFragment(AccountFragment.newInstance("",""));
+                        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                        String userToken = settings.getString("userToken",null);
+                        if (userToken != null) {
+                            openFragment(AccountFragment.newInstance("",""));
+                        } else {
+                            openFragment(NoAccountFragment.newInstance("",""));
+                        }
                         return true;
                 }
                 return false;
             }
         };
+
+    private void openSpecificFragment() {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        String userToken = settings.getString("userToken",null);
+
+        if (userToken != null) {
+            openFragment(AccountFragment.newInstance("",""));
+        } else {
+            openFragment(NoAccountFragment.newInstance("",""));
+        }
+    }
 }

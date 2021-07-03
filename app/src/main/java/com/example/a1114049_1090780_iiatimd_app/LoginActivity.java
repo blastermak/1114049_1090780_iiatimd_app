@@ -3,8 +3,12 @@ package com.example.a1114049_1090780_iiatimd_app;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -25,11 +29,16 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
+
 public class LoginActivity extends AppCompatActivity {
 
     boolean authenticating;
-    String database_url = "http://10.0.2.2:8000/api/register";
+    String database_url = "http://10.0.2.2:8000/api/login/";
+    String database_url2 = "http://iiatimd.jimmak.nl:8000/api/login";
     RequestQueue queue;
+
+//    private LoginViewModel loginViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,13 +53,21 @@ public class LoginActivity extends AppCompatActivity {
         Button backToAccountButton = findViewById(R.id.backToAccountButton2);
         Button loginButton = findViewById(R.id.loginButton);
 
-        backToAccountButton.setOnClickListener(this::toAccountFragment);
+        backToAccountButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openAccountView();
+                Log.d("BackButton","clicked");
+            }
+        });
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 login(userEmail.getText().toString(), userPassword.getText().toString());
             }
         });
+
+//        loginViewModel = new ViewModelProvider(this).get(RecipeViewModel.class);
     }
 
     private void login(String username, String password) {
@@ -66,59 +83,52 @@ public class LoginActivity extends AppCompatActivity {
                 JSONObject jsonBody = new JSONObject();
                 jsonBody.put("email", username);
                 jsonBody.put("password", password);
-                final String requestBody = jsonBody.toString();
-                StringRequest stringRequest = new StringRequest(Request.Method.POST, database_url, new Response.Listener<String>() {
+
+                final JSONObject[] jsonResponse = {new JSONObject()};
+
+                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, database_url, jsonBody, new Response.Listener<JSONObject>() {
                     @Override
-                    public void onResponse(String response) {
-                        Log.d("Volley", response);
+                    public void onResponse(JSONObject response) {
+                        Log.d("Volley", String.valueOf(response));
+                        try {
+                            jsonResponse[0] = response.getJSONObject("data");
+                            String userToken = jsonResponse[0].getString("token");
+                            Log.d("Token", userToken);
+                            JSONObject user = jsonResponse[0].getJSONObject("user");
+                            String username = user.getString("name");
+                            Log.d("username", username);
+
+                            SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                            SharedPreferences.Editor editor = settings.edit();
+                            editor.putString("userToken", userToken);
+                            editor.putString("username", username);
+                            editor.apply();
+                            Toast.makeText(getApplicationContext(), "Succesvol ingelogd", Toast.LENGTH_SHORT).show();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        openAccountView();
                     }
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.d("VolleyError", error.getMessage());
+                        Log.d("Volley", error.toString());
+                        Toast.makeText(getApplicationContext(), "Onjuiste inloggegevens", Toast.LENGTH_SHORT).show();
                     }
-                })
-                {
-//                    @Override
-//                    public String getBodyContentType() {
-//                        return "application/json; charset=utf-8";
-//                    }
-//
-//                    @Override
-//                    public byte[] getBody() throws AuthFailureError {
-//                        return requestBody.getBytes();
-//                    }
-//
-                    @Override
-                    protected Response<String> parseNetworkResponse(NetworkResponse response) {
-                        String responseString = "";
-                        if (response != null) {
-                            responseString = String.valueOf(response.statusCode);
-                            Log.d("VolleyResponse", String.valueOf(response.data));
-                            // returns some kind of token we could use?
-                            Log.d("VolleyResponseHeaders", String.valueOf(response.headers));
-                        }
-                        return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
-                    }
-                };
-
-                queue.add(stringRequest);
+                });
+                queue.add(jsonObjectRequest);
                 authenticating = false;
-                Toast.makeText(getApplicationContext(), "Succesvol ingelogd", Toast.LENGTH_SHORT).show();
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         } else {
             Toast.makeText(getApplicationContext(), "Onjuiste logingegevens", Toast.LENGTH_SHORT).show();
         }
-
     }
 
-    public void toAccountFragment(View view) {
-        Fragment accountFragment = new AccountFragment();
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragmentContainer, accountFragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
+    public void openAccountView() {
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        intent.putExtra("fragmentToLoad", "AccountFragment");
+        startActivity(intent);
     }
 }

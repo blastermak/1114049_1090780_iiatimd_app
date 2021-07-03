@@ -1,16 +1,19 @@
 package com.example.a1114049_1090780_iiatimd_app;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -62,41 +65,31 @@ public class AccountFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_account, container, false);
 
-        Button registerButton = view.findViewById(R.id.registerProfileButton);
-        Button loginButton = view.findViewById(R.id.loginProfileButton);
+        Button logoutButton = view.findViewById(R.id.logoutButton);
 
-        registerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(view.getContext(), RegisterActivity.class));
-            }
-        });
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(view.getContext(), LoginActivity.class));
-            }
-        });
+        logoutButton.setOnClickListener(this::logout);
 
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getContext());
+        String userToken = settings.getString("userToken", null);
+        String username = settings.getString("username", "");
+        TextView usernameText = view.findViewById(R.id.usernameField);
+        usernameText.setText("Welkom " + username + "!");
         // Inflate the layout for this fragment
         return view;
     }
 
-//    private void openLoginFragment(View view) {
-//        Log.d("openFragment", "login Fragment");
-//        Fragment fragment = new LoginFragment();
-//        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-//        transaction.replace(R.id.fragmentContainer, fragment);
-//        transaction.addToBackStack(null);
-//        transaction.commit();
-//    }
-//
-//    public void openRegisterFragment(View view) {
-//        Log.d("openFragment", "register Fragment");
-//        Fragment fragment = new RegisterFragment();
-//        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-//        transaction.replace(R.id.fragmentContainer, fragment);
-//        transaction.addToBackStack(null);
-//        transaction.commit();
-//    }
+    private void logout(View view) {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getContext());
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putString("userToken", null);
+        editor.apply();
+        Log.d("uitgelogd", "uitgelogd");
+        openAccountView();
+    }
+
+    public void openAccountView() {
+        Intent intent = new Intent(getContext(), MainActivity.class);
+        intent.putExtra("fragmentToLoad", "AccountFragment");
+        startActivity(intent);
+    }
 }
