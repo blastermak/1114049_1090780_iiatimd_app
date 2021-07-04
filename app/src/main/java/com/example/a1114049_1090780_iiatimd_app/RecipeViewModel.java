@@ -41,7 +41,7 @@ public class RecipeViewModel extends AndroidViewModel {
 
     public void updateRecipe(Recipe recipe){ recipeRepository.updateRecipe(recipe); }
 
-    LiveData<RecipeWithInstructions> getRecipesWithInstructions(int recipeId){
+    LiveData<List<RecipeWithInstructions>> getRecipesWithInstructions(int recipeId){
         return recipeRepository.getRecipesWithInstructions(recipeId);
     }
 
