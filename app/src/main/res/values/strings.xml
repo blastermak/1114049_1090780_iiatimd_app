@@ -21,6 +21,9 @@
 
     <string name="actionButtonContentDescription">Content description for actionButton</string>
 
+    <!-- Strings used for search functionality   -->
+    <string name="zoek_button">Zoek</string>
+
     <!--    Strings pertaining to new recipe screens-->
     <string name="newRecipeHeaderText">Voeg een nieuw recept toe!</string>
     <string name="newRecipeTitleHint">Receptnaam</string>

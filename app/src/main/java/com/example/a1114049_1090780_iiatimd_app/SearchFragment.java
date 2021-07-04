@@ -4,9 +4,22 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.SearchView;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -14,6 +27,9 @@ import android.view.ViewGroup;
  * create an instance of this fragment.
  */
 public class SearchFragment extends Fragment {
+
+    String database_url = "http://10.0.2.2:8000/api/search/";
+    RequestQueue queue;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -53,12 +69,64 @@ public class SearchFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        queue = Volley.newRequestQueue(getContext());
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_search, container, false);
+
+
+        Button searchButton = view.findViewById(R.id.searchButton);
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                search();
+            }
+        });
+
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_search, container, false);
+        return view;
+    }
+
+    public void search() {
+        boolean searchIsValid = false;
+        SearchView searchView = getView().findViewById(R.id.searchInput);
+        String searchInput = searchView.getQuery().toString();
+        if (!searchInput.isEmpty()) {
+            searchIsValid = true;
+        }
+
+        if (searchIsValid) {
+            try {
+                JSONObject jsonBody = new JSONObject();
+                jsonBody.put("search", searchInput);
+
+                final JSONObject[] jsonResponse = {new JSONObject()};
+
+                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, database_url, jsonBody, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("VolleyResponse", String.valueOf(response));
+                        try {
+                            jsonResponse[0] = response.getJSONObject("data");
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("VolleyError", error.getMessage());
+                    }
+                });
+                queue.add(jsonObjectRequest);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
