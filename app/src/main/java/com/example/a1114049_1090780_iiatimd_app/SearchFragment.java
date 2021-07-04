@@ -107,15 +107,16 @@ public class SearchFragment extends Fragment {
                         Log.d("VolleyResponse", String.valueOf(response));
                         try {
                             jsonResponse[0] = response.getJSONObject("data");
-
                         } catch (JSONException e) {
                             e.printStackTrace();
+                            Log.d("failed to connect", "failed");
                         }
                     }
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.d("VolleyError", error.getMessage());
+                        searchLocal(jsonBody.toString());
                     }
                 });
                 queue.add(jsonObjectRequest);
@@ -123,5 +124,14 @@ public class SearchFragment extends Fragment {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void searchLocal(String searchTerm) {
+        recipeViewModel.getSearchRecipes(searchTerm).observe(getViewLifecycleOwner(), recipes -> {
+            Log.d("inside", "inside recipeViewModel");
+            for (int i = 0; i < recipes.size(); i++) {
+                Log.d("recept", String.valueOf(recipes.get(i)));
+            }
+        });
     }
 }

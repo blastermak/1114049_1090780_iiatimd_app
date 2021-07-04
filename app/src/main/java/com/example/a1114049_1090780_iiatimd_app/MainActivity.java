@@ -30,6 +30,15 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
+//    String database_url = "http://iiatimd.jimmak.nl/api/recipe";
+    String database_url = "http://10.0.2.2:8000/api/recipe";
+
+//    String database_instructions_url = "http://iiatimd.jimmak.nl/api/instructions/";
+    String database_instructions_url = "http://10.0.2.2:8000/api/instructions/";
+
+//    String database_ingredients_url = "http://iiatimd.jimmak.nl/api/ingredients/";
+    String database_ingredients_url = "http://10.0.2.2:8000/api/ingredients/";
+
     // Variable for the bottom navigation view
     private BottomNavigationView bottomNavigationView;
 
@@ -84,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        JsonObjectRequest instructionsJsonObjectRequest = new JsonObjectRequest(Request.Method.GET, "http://iiatimd.jimmak.nl/api/instructions/",null, new Response.Listener<JSONObject>() {
+        JsonObjectRequest instructionsJsonObjectRequest = new JsonObjectRequest(Request.Method.GET, database_instructions_url,null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
@@ -109,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        JsonObjectRequest ingredientsJsonObjectRequest = new JsonObjectRequest(Request.Method.GET, "http://iiatimd.jimmak.nl/api/ingredients/",null, new Response.Listener<JSONObject>() {
+        JsonObjectRequest ingredientsJsonObjectRequest = new JsonObjectRequest(Request.Method.GET, database_ingredients_url,null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {

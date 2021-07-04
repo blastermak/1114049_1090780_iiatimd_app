@@ -103,7 +103,8 @@ public class newRecipeActivity extends AppCompatActivity {
         if (formValidated) {
             try {
                 RequestQueue requestQueue = Volley.newRequestQueue(this);
-                String URL = "http://iiatimd.jimmak.nl/api/recipe";
+//                String URL = "http://iiatimd.jimmak.nl/api/recipe";
+                String URL = "http://10.0.2.2:8000/api/recipe";
                 JSONObject jsonBody = new JSONObject();
                 jsonBody.put("title", String.valueOf(recipeTitleText.getText()));
                 jsonBody.put("description_short", String.valueOf(recipeShortDescriptionText.getText()));
