@@ -7,6 +7,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +21,8 @@ public class recipeIngredientsDetail extends AppCompatActivity {
     private RecyclerView.LayoutManager ingredientsLayoutManager;
 
     private RecipeViewModel recipeViewModel;
+
+    private FloatingActionButton fab;
 
     private ArrayList<Ingredient> myIngredients = new ArrayList<>();
     private List<Ingredient> ingredientList;
@@ -54,5 +59,15 @@ public class recipeIngredientsDetail extends AppCompatActivity {
         });
         ingredientsListRecyclerViewAdapter = new IngredientAdapter(recipeViewModel, myIngredients);
         ingredientsListRecyclerView.setAdapter(ingredientsListRecyclerViewAdapter);
+
+        fab = findViewById(R.id.newIngredientButton);
+        fab.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                Intent sendingIntent = new Intent(recipeIngredientsDetail.this, newIngredientActivity.class);
+                sendingIntent.putExtra("RECIPE_ID", detailRecipeid);
+                startActivity(sendingIntent);
+            }
+        });
     }
 }

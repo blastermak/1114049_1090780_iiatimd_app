@@ -28,6 +28,8 @@ public class recipeInstructionsDetail extends AppCompatActivity {
     private ArrayList<Instruction> myInstructions = new ArrayList<>();
     private List<Instruction> instructionList;
 
+    private FloatingActionButton fab;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +67,16 @@ public class recipeInstructionsDetail extends AppCompatActivity {
 
         instructionsListRecyclerViewAdapter = new InstructionAdapter(recipeViewModel, myInstructions);
         instructionsListRecyclerView.setAdapter(instructionsListRecyclerViewAdapter);
+
+        fab = findViewById(R.id.newInstructionButton);
+        fab.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                Intent sendingIntent = new Intent(recipeInstructionsDetail.this, newInstructionActivity.class);
+                sendingIntent.putExtra("RECIPE_ID", detailRecipeid);
+                startActivity(sendingIntent);
+            }
+        });
 
     }
 }
