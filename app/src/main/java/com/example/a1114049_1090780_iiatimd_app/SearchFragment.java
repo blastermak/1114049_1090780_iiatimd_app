@@ -3,6 +3,7 @@ package com.example.a1114049_1090780_iiatimd_app;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,9 +28,9 @@ import org.json.JSONObject;
  * create an instance of this fragment.
  */
 public class SearchFragment extends Fragment {
-
     String database_url = "http://10.0.2.2:8000/api/search/";
     RequestQueue queue;
+    private RecipeViewModel recipeViewModel;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -73,11 +74,8 @@ public class SearchFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
-
-
         Button searchButton = view.findViewById(R.id.searchButton);
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,8 +83,7 @@ public class SearchFragment extends Fragment {
                 search();
             }
         });
-
-
+        recipeViewModel = new ViewModelProvider(this).get(RecipeViewModel.class);
         // Inflate the layout for this fragment
         return view;
     }
@@ -103,9 +100,7 @@ public class SearchFragment extends Fragment {
             try {
                 JSONObject jsonBody = new JSONObject();
                 jsonBody.put("search", searchInput);
-
                 final JSONObject[] jsonResponse = {new JSONObject()};
-
                 JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, database_url, jsonBody, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
