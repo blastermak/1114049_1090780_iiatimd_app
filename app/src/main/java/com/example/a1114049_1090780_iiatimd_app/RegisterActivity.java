@@ -70,12 +70,15 @@ public class RegisterActivity extends AppCompatActivity {
         if (!username.isEmpty() && !email.isEmpty() && email.contains("@") && !password.isEmpty() && !confirmPassword.isEmpty() && password.equals(confirmPassword)) {
             formIsValid = true;
         }
+        if (!password.equals(confirmPassword)) {
+            Toast.makeText(getApplicationContext(), "Wachtwoorden komen niet overeen", Toast.LENGTH_SHORT).show();
+        }
 
         if (formIsValid) {
             try {
                 authenticating = true;
                 JSONObject jsonBody = new JSONObject();
-//                jsonBody.put("name", username);
+                jsonBody.put("name", username);
                 jsonBody.put("email", email);
                 jsonBody.put("password", password);
 
@@ -84,20 +87,22 @@ public class RegisterActivity extends AppCompatActivity {
                 JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, database_url, jsonBody, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d("Volley", response.toString());
+                        Log.d("VolleyResponse", String.valueOf(response));
                         try {
                             jsonResponse[0] = response.getJSONObject("data");
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+                        Toast.makeText(getApplicationContext(), "Aanmaken gelukt", Toast.LENGTH_SHORT).show();
                         openAccountView();
                     }
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.d("Volley Error", error.getMessage());
+                        Log.d("VolleyError", error.toString());
                     }
                 });
+
                 queue.add(jsonObjectRequest);
                 authenticating = false;
             } catch (JSONException e) {
