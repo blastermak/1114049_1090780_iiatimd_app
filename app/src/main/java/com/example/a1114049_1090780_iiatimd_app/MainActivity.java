@@ -1,18 +1,18 @@
 package com.example.a1114049_1090780_iiatimd_app;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.util.Log;
+import android.view.MenuItem;
+import android.view.View;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.RecyclerView;
-
-
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.MenuItem;
-import android.view.View;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -25,10 +25,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 
-
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity  {
 
 //    String database_url = "http://iiatimd.jimmak.nl/api/recipe";
     String database_url = "http://10.0.2.2:8000/api/recipe";
@@ -41,10 +39,9 @@ public class MainActivity extends AppCompatActivity {
 
     // Variable for the bottom navigation view
     private BottomNavigationView bottomNavigationView;
-
     private FloatingActionButton fab;
-
     private RecipeViewModel recipeViewModel;
+    public String loginToken = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,6 +144,9 @@ public class MainActivity extends AppCompatActivity {
         VolleySingleton.getInstance(this.getApplicationContext()).addToRequestQueue(instructionsJsonObjectRequest);
         VolleySingleton.getInstance(this.getApplicationContext()).addToRequestQueue(ingredientsJsonObjectRequest);
 
+        if (getIntent().getExtras() != null) {
+            openSpecificFragment();
+        }
     }
 
     // Method for opening fragment in the correct container
@@ -173,10 +173,27 @@ public class MainActivity extends AppCompatActivity {
                         openFragment(SearchFragment.newInstance("",""));
                         return true;
                     case R.id.bottom_menu_page_account:
-                        openFragment(AccountFragment.newInstance("",""));
+                        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                        String userToken = settings.getString("userToken",null);
+                        if (userToken != null) {
+                            openFragment(AccountFragment.newInstance("",""));
+                        } else {
+                            openFragment(NoAccountFragment.newInstance("",""));
+                        }
                         return true;
                 }
                 return false;
             }
         };
+
+    private void openSpecificFragment() {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        String userToken = settings.getString("userToken",null);
+
+        if (userToken != null) {
+            openFragment(AccountFragment.newInstance("",""));
+        } else {
+            openFragment(NoAccountFragment.newInstance("",""));
+        }
+    }
 }

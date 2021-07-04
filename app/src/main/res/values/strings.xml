@@ -57,4 +57,10 @@
     <string name="newInstructionHeader">Voeg een nieuwe instructie toe!</string>
     <string name="newInstructionDescriptionHint">Wat moet je doen?</string>
     <string name="newInstructionStepNumberHint">Waar in de volgorde komt de instructie terecht?</string>
+
+    <string name="register_profile_button">Register</string>
+    <string name="login_profile_button">Login</string>
+    <string name="account_naam">Welkom!</string>
+    <string name="recepten_van_account_naam">Recepten van \'account naam\'</string>
+    <string name="no_account">Je bent op dit moment niet ingelogd. Klik op een van de knoppen om in te loggen of een account aan te maken.</string>
 </resources>

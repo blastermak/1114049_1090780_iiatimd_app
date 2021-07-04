@@ -1,12 +1,19 @@
 package com.example.a1114049_1090780_iiatimd_app;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
+import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -14,7 +21,6 @@ import android.view.ViewGroup;
  * create an instance of this fragment.
  */
 public class AccountFragment extends Fragment {
-
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -56,9 +62,34 @@ public class AccountFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_account, container, false);
+
+        Button logoutButton = view.findViewById(R.id.logoutButton);
+
+        logoutButton.setOnClickListener(this::logout);
+
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getContext());
+        String userToken = settings.getString("userToken", null);
+        String username = settings.getString("username", "");
+        TextView usernameText = view.findViewById(R.id.usernameField);
+        usernameText.setText("Welkom " + username + "!");
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_account, container, false);
+        return view;
+    }
+
+    private void logout(View view) {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getContext());
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putString("userToken", null);
+        editor.apply();
+        Log.d("uitgelogd", "uitgelogd");
+        openAccountView();
+    }
+
+    public void openAccountView() {
+        Intent intent = new Intent(getContext(), MainActivity.class);
+        intent.putExtra("fragmentToLoad", "AccountFragment");
+        startActivity(intent);
     }
 }
