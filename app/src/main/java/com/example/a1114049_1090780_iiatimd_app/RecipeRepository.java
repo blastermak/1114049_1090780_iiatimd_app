@@ -41,7 +41,7 @@ public class RecipeRepository {
         });
     }
 
-    LiveData<RecipeWithInstructions> getRecipesWithInstructions(int recipeId){
+    LiveData<List<RecipeWithInstructions>> getRecipesWithInstructions(int recipeId){
         return recipeDAO.getRecipesWithInstructions(recipeId);
     }
 

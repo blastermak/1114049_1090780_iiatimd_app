@@ -52,6 +52,10 @@ public class InstructionAdapter extends RecyclerView.Adapter<InstructionAdapter.
 
             editButton = v.findViewById(R.id.editInstructionButton);
 
+            this.recipeViewModel = viewModel;
+
+//            this.showingInstruction = viewModel.getInstructionById()
+
 
         }
     }
@@ -72,7 +76,12 @@ public class InstructionAdapter extends RecyclerView.Adapter<InstructionAdapter.
         holder.descriptionTextView.setText(instructions.get(position).getDescription());
         holder.editInstructionTextInputLayout.getEditText().setText(instructions.get(position).getDescription());
 
-        LiveData<Instruction> currentInstruction = viewModel.getInstructionById(instructions.get(position).getUuid());
+
+//        holder.showingInstruction = instructions.get(position);
+
+        Instruction thisInstruciton = instructions.get(position);
+
+
         holder.editButton.setOnClickListener(new View.OnClickListener(){
             boolean editing = false;
             @Override
@@ -82,10 +91,9 @@ public class InstructionAdapter extends RecyclerView.Adapter<InstructionAdapter.
                     holder.editInstructionTextInputLayout.setVisibility(View.GONE);
 
                     holder.descriptionTextView.setText(holder.editInstructionDescriptionTextEdit.getText().toString());
-                    instructions.get(position).setDescription(holder.editInstructionDescriptionTextEdit.getText().toString());
+                    thisInstruciton.setDescription(holder.editInstructionDescriptionTextEdit.getText().toString());
 
                     viewModel.updateInstruction(instructions.get(position));
-
                     editing = false;
                 } else {
                     holder.descriptionTextView.setVisibility(View.GONE);

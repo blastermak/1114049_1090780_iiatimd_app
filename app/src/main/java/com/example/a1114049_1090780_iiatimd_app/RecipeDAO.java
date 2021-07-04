@@ -37,7 +37,7 @@ public interface RecipeDAO {
 
     @Transaction
     @Query("SELECT * FROM recipe WHERE uuid = :id")
-    LiveData<RecipeWithInstructions> getRecipesWithInstructions(int id);
+    LiveData<List<RecipeWithInstructions>> getRecipesWithInstructions(int id);
 
     @Query("SELECT * FROM instruction WHERE uuid = :id")
     LiveData<Instruction> getInstructionById(int id);
