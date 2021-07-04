@@ -37,13 +37,9 @@ public class InstructionAdapter extends RecyclerView.Adapter<InstructionAdapter.
         public TextInputLayout editInstructionTextInputLayout;
         public TextInputEditText editInstructionDescriptionTextEdit;
 
-        public Instruction showingInstruction;
-        private RecipeViewModel recipeViewModel;
-
         public ImageButton editButton;
-        private boolean editing = false;
 
-        public InstructionViewHolder(View v, RecipeViewModel viewModel){
+        public InstructionViewHolder(View v){
             super(v);
 
             descriptionTextView = v.findViewById(R.id.instructionDescription);
@@ -51,11 +47,6 @@ public class InstructionAdapter extends RecyclerView.Adapter<InstructionAdapter.
             editInstructionDescriptionTextEdit = v.findViewById(R.id.editInstructionDescriptionTextEdit);
 
             editButton = v.findViewById(R.id.editInstructionButton);
-
-            this.recipeViewModel = viewModel;
-
-//            this.showingInstruction = viewModel.getInstructionById()
-
 
         }
     }
@@ -65,7 +56,7 @@ public class InstructionAdapter extends RecyclerView.Adapter<InstructionAdapter.
     public InstructionAdapter.InstructionViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType){
         View v = (CardView) LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.instruction_card, parent, false);
-        InstructionViewHolder instructionViewHolder = new InstructionViewHolder(v, this.viewModel);
+        InstructionViewHolder instructionViewHolder = new InstructionViewHolder(v);
 
         return instructionViewHolder;
     }
@@ -76,11 +67,7 @@ public class InstructionAdapter extends RecyclerView.Adapter<InstructionAdapter.
         holder.descriptionTextView.setText(instructions.get(position).getDescription());
         holder.editInstructionTextInputLayout.getEditText().setText(instructions.get(position).getDescription());
 
-
-//        holder.showingInstruction = instructions.get(position);
-
-        Instruction thisInstruciton = instructions.get(position);
-
+        Instruction thisInstruction = instructions.get(position);
 
         holder.editButton.setOnClickListener(new View.OnClickListener(){
             boolean editing = false;
@@ -91,7 +78,7 @@ public class InstructionAdapter extends RecyclerView.Adapter<InstructionAdapter.
                     holder.editInstructionTextInputLayout.setVisibility(View.GONE);
 
                     holder.descriptionTextView.setText(holder.editInstructionDescriptionTextEdit.getText().toString());
-                    thisInstruciton.setDescription(holder.editInstructionDescriptionTextEdit.getText().toString());
+                    thisInstruction.setDescription(holder.editInstructionDescriptionTextEdit.getText().toString());
 
                     viewModel.updateInstruction(instructions.get(position));
                     editing = false;

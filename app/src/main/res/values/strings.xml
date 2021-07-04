@@ -42,4 +42,6 @@
 
     <!--    String pertaining to ingredients card-->
     <string name="ingredientsHeader">Ingrediënten</string>
+    <string name="editIngredientNameHint">Ingrediëntnaam</string>
+    <string name="editIngredientAmountHint">Hoeveelheid</string>
 </resources>

@@ -61,13 +61,19 @@ public class RecipeRepository {
         });
     }
 
-    LiveData<RecipeWithIngredients> getRecipesWithIngredients(int recipeId){
+    LiveData<List<RecipeWithIngredients>> getRecipesWithIngredients(int recipeId){
         return recipeDAO.getRecipesWithIngredients(recipeId);
     }
 
     void insertIngredient(Ingredient ingredient){
         AppDatabase.databaseWriterExecutor.execute(() -> {
             recipeDAO.insertIngredient(ingredient);
+        });
+    }
+
+    void updateIngredient(Ingredient ingredient){
+        AppDatabase.databaseWriterExecutor.execute(() -> {
+            recipeDAO.updateIngredient(ingredient);
         });
     }
 

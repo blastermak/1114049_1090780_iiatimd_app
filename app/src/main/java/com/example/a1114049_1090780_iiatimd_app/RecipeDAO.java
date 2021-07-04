@@ -50,8 +50,11 @@ public interface RecipeDAO {
 
     @Transaction
     @Query("SELECT * FROM recipe WHERE uuid = :id")
-    LiveData<RecipeWithIngredients> getRecipesWithIngredients(int id);
+    LiveData<List<RecipeWithIngredients>> getRecipesWithIngredients(int id);
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insertIngredient(Ingredient ingredient);
+
+    @Update
+    void updateIngredient(Ingredient ingredient);
 }
