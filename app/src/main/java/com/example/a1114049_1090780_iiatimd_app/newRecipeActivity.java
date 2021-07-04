@@ -38,11 +38,6 @@ public class newRecipeActivity extends AppCompatActivity {
     private TextInputEditText recipeDescriptionText;
     private TextInputEditText recipePrepTimeMin;
 
-    private int titleCharacterAmount = 20;
-    private int shortDescriptionCharacterAmount = 50;
-    private int descriptionCharacterAmount = 500;
-    private int prepTimeMinCharacterAmount = 3;
-
     private Button recipeSubmitButton;
 
     private boolean formValidated = false;

@@ -23,7 +23,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/editRecipeTitle"
+        android:id="@+id/newInstructionDescriptionLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -49,7 +49,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/newRecipeShortDescription"
+        android:id="@+id/newIngredientAmountLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -64,7 +64,7 @@
         app:counterMaxLength="50"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editRecipeTitle"
+        app:layout_constraintTop_toBottomOf="@+id/newInstructionDescriptionLayout"
         app:endIconMode="clear_text"
         app:errorEnabled="true">
 
@@ -91,7 +91,7 @@
         app:counterMaxLength="500"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/newRecipeShortDescription"
+        app:layout_constraintTop_toBottomOf="@+id/newIngredientAmountLayout"
         app:endIconMode="clear_text"
         app:errorEnabled="true">
 

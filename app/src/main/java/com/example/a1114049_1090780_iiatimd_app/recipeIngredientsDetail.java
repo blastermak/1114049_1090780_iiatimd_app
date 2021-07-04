@@ -7,6 +7,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +22,10 @@ public class recipeIngredientsDetail extends AppCompatActivity {
 
     private RecipeViewModel recipeViewModel;
 
+    private FloatingActionButton fab;
+
     private ArrayList<Ingredient> myIngredients = new ArrayList<>();
+    private List<Ingredient> ingredientList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,24 +37,37 @@ public class recipeIngredientsDetail extends AppCompatActivity {
         ingredientsListRecyclerView.setLayoutManager(ingredientsLayoutManager);
         ingredientsListRecyclerView.hasFixedSize();
 
-        ingredientsListRecyclerViewAdapter = new IngredientAdapter(myIngredients);
-        ingredientsListRecyclerView.setAdapter(ingredientsListRecyclerViewAdapter);
+        recipeViewModel = new ViewModelProvider(this).get(RecipeViewModel.class);
 
         Intent receivingIntent = getIntent();
         int detailRecipeid = receivingIntent.getIntExtra("RECIPE_ID", 0);
 
-        recipeViewModel = new ViewModelProvider(this).get(RecipeViewModel.class);
-
         recipeViewModel.getRecipesWithIngredients(detailRecipeid).observe(this, ingredients -> {
+            myIngredients.clear();
             try {
-                List<Ingredient> ingredientList = ingredients.ingredientList;
-                for (int i = 0; i < ingredientList.size(); i++){
-                    myIngredients.add(ingredientList.get(i));
-                    ingredientsListRecyclerViewAdapter.notifyItemInserted(myIngredients.size()-1);
+                for(int i = 0; i < ingredients.size(); i++) {
+                    ingredientList = ingredients.get(i).ingredientList;
+                    for (int j = 0; j < ingredientList.size(); j++) {
+                        myIngredients.add(ingredientList.get(j));
+//                        ingredientsListRecyclerViewAdapter.notifyItemInserted(myIngredients.size() - 1);
+                    }
                 }
+                ingredientsListRecyclerViewAdapter.notifyDataSetChanged();
             } catch (IndexOutOfBoundsException e){
             }
 
+        });
+        ingredientsListRecyclerViewAdapter = new IngredientAdapter(recipeViewModel, myIngredients);
+        ingredientsListRecyclerView.setAdapter(ingredientsListRecyclerViewAdapter);
+
+        fab = findViewById(R.id.newIngredientButton);
+        fab.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                Intent sendingIntent = new Intent(recipeIngredientsDetail.this, newIngredientActivity.class);
+                sendingIntent.putExtra("RECIPE_ID", detailRecipeid);
+                startActivity(sendingIntent);
+            }
         });
     }
 }

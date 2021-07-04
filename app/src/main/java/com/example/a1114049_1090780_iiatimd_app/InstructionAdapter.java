@@ -16,8 +16,16 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.List;
 
@@ -37,13 +45,9 @@ public class InstructionAdapter extends RecyclerView.Adapter<InstructionAdapter.
         public TextInputLayout editInstructionTextInputLayout;
         public TextInputEditText editInstructionDescriptionTextEdit;
 
-        public Instruction showingInstruction;
-        private RecipeViewModel recipeViewModel;
-
         public ImageButton editButton;
-        private boolean editing = false;
 
-        public InstructionViewHolder(View v, RecipeViewModel viewModel){
+        public InstructionViewHolder(View v){
             super(v);
 
             descriptionTextView = v.findViewById(R.id.instructionDescription);
@@ -51,11 +55,6 @@ public class InstructionAdapter extends RecyclerView.Adapter<InstructionAdapter.
             editInstructionDescriptionTextEdit = v.findViewById(R.id.editInstructionDescriptionTextEdit);
 
             editButton = v.findViewById(R.id.editInstructionButton);
-
-            this.recipeViewModel = viewModel;
-
-//            this.showingInstruction = viewModel.getInstructionById()
-
 
         }
     }
@@ -65,7 +64,7 @@ public class InstructionAdapter extends RecyclerView.Adapter<InstructionAdapter.
     public InstructionAdapter.InstructionViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType){
         View v = (CardView) LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.instruction_card, parent, false);
-        InstructionViewHolder instructionViewHolder = new InstructionViewHolder(v, this.viewModel);
+        InstructionViewHolder instructionViewHolder = new InstructionViewHolder(v);
 
         return instructionViewHolder;
     }
@@ -76,24 +75,23 @@ public class InstructionAdapter extends RecyclerView.Adapter<InstructionAdapter.
         holder.descriptionTextView.setText(instructions.get(position).getDescription());
         holder.editInstructionTextInputLayout.getEditText().setText(instructions.get(position).getDescription());
 
-
-//        holder.showingInstruction = instructions.get(position);
-
-        Instruction thisInstruciton = instructions.get(position);
-
+        Instruction thisInstruction = instructions.get(position);
 
         holder.editButton.setOnClickListener(new View.OnClickListener(){
             boolean editing = false;
+            String oldDescription = thisInstruction.getDescription();
             @Override
             public void onClick(View v){
                 if (editing){
                     holder.descriptionTextView.setVisibility(View.VISIBLE);
                     holder.editInstructionTextInputLayout.setVisibility(View.GONE);
 
-                    holder.descriptionTextView.setText(holder.editInstructionDescriptionTextEdit.getText().toString());
-                    thisInstruciton.setDescription(holder.editInstructionDescriptionTextEdit.getText().toString());
-
-                    viewModel.updateInstruction(instructions.get(position));
+                    if (holder.editInstructionDescriptionTextEdit.getText().toString() != oldDescription ){
+                        holder.descriptionTextView.setText(holder.editInstructionDescriptionTextEdit.getText().toString());
+                        thisInstruction.setDescription(holder.editInstructionDescriptionTextEdit.getText().toString());
+                        viewModel.updateInstruction(instructions.get(position));
+                        sendToServer(thisInstruction, holder.itemView);
+                    }
                     editing = false;
                 } else {
                     holder.descriptionTextView.setVisibility(View.GONE);
@@ -109,5 +107,36 @@ public class InstructionAdapter extends RecyclerView.Adapter<InstructionAdapter.
     @Override
     public int getItemCount(){
         return instructions.size();
+    }
+
+    public void sendToServer(Instruction instruction, View v){
+        try {
+            String URL = "http://iiatimd.jimmak.nl/api/instructions/" + instruction.getUuid();
+            JSONObject jsonBody = new JSONObject();
+            jsonBody.put("step_number", instruction.getStep_number());
+            jsonBody.put("description", instruction.getDescription());
+
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, URL, jsonBody, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    try {
+                        Snackbar snackbar = Snackbar.make(v, response.getString("message"), Snackbar.LENGTH_LONG);
+                        snackbar.show();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.e("VOLLEY", error.toString());
+                }
+            });
+
+            VolleySingleton.getInstance(viewModel.getApplication()).addToRequestQueue(jsonObjectRequest);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }

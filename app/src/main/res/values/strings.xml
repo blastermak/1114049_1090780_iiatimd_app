@@ -45,4 +45,16 @@
 
     <!--    String pertaining to ingredients card-->
     <string name="ingredientsHeader">Ingrediënten</string>
+    <string name="editIngredientNameHint">Ingrediëntnaam</string>
+    <string name="editIngredientAmountHint">Hoeveelheid</string>
+
+    <!--    Strings pertaining to new ingredients screen-->
+    <string name="newIngredientHeader">Voeg een nieuw ingrediënt toe!</string>
+    <string name="newIngredientNameHint">Hoe heet het ingrediënt?</string>
+    <string name="newIngredientAmountHint">Hoeveelheid van het ingrediënt</string>
+
+    <!--    Strings pertaining to new instructions screen-->
+    <string name="newInstructionHeader">Voeg een nieuwe instructie toe!</string>
+    <string name="newInstructionDescriptionHint">Wat moet je doen?</string>
+    <string name="newInstructionStepNumberHint">Waar in de volgorde komt de instructie terecht?</string>
 </resources>
