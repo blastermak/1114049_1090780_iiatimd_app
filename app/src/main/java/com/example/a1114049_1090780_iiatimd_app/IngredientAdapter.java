@@ -1,5 +1,6 @@
 package com.example.a1114049_1090780_iiatimd_app;
 
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +12,17 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.List;
 
@@ -70,10 +81,10 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.In
 
         Ingredient thisIngredient = ingredients.get(position);
 
-        Log.d("ingredienstAdatpter", thisIngredient.getName());
-
         holder.editButton.setOnClickListener(new View.OnClickListener(){
             boolean editing = false;
+            String oldName = thisIngredient.getName();
+            String oldAmount = thisIngredient.getAmount();
             @Override
             public void onClick(View v){
                 if (editing){
@@ -83,10 +94,23 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.In
                     holder.nameInputLayout.setVisibility(View.GONE);
                     holder.amountInputLayout.setVisibility(View.GONE);
 
-                    thisIngredient.setName(holder.nameInputLayout.getEditText().getText().toString());
-                    thisIngredient.setAmount(holder.amountInputLayout.getEditText().getText().toString());
-
-                    viewModel.updateIngredient(thisIngredient);
+                    if (holder.nameInputLayout.getEditText().getText().toString() != oldName &&
+                            holder.amountInputLayout.getEditText().getText().toString() == oldAmount ){
+                        thisIngredient.setName(holder.nameInputLayout.getEditText().getText().toString());
+                        viewModel.updateIngredient(thisIngredient);
+                        sendToServer(thisIngredient, holder.itemView);
+                    } else if (holder.nameInputLayout.getEditText().getText().toString() == oldName &&
+                            holder.amountInputLayout.getEditText().getText().toString() != oldAmount ){
+                        thisIngredient.setAmount(holder.amountInputLayout.getEditText().getText().toString());
+                        viewModel.updateIngredient(thisIngredient);
+                        sendToServer(thisIngredient, holder.itemView);
+                    } else if (holder.nameInputLayout.getEditText().getText().toString() != oldName &&
+                            holder.amountInputLayout.getEditText().getText().toString() != oldAmount ){
+                        thisIngredient.setName(holder.nameInputLayout.getEditText().getText().toString());
+                        thisIngredient.setAmount(holder.amountInputLayout.getEditText().getText().toString());
+                        viewModel.updateIngredient(thisIngredient);
+                        sendToServer(thisIngredient, holder.itemView);
+                    }
                     editing = false;
                 } else {
                     holder.ingredientNameTextView.setVisibility(View.GONE);
@@ -105,5 +129,36 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.In
     @Override
     public int getItemCount(){
         return ingredients.size();
+    }
+
+    public void sendToServer(Ingredient ingredient, View v){
+        try {
+            String URL = "http://iiatimd.jimmak.nl/api/ingredients/" + ingredient.getUuid();
+            JSONObject jsonBody = new JSONObject();
+            jsonBody.put("name", ingredient.getName());
+            jsonBody.put("amount", ingredient.getAmount());
+
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, URL, jsonBody, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    try {
+                        Snackbar snackbar = Snackbar.make(v, response.getString("message"), Snackbar.LENGTH_LONG);
+                        snackbar.show();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.e("VOLLEY", error.toString());
+                }
+            });
+
+            VolleySingleton.getInstance(viewModel.getApplication()).addToRequestQueue(jsonObjectRequest);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }

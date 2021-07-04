@@ -10,17 +10,12 @@ import java.util.List;
 public class RecipeViewModel extends AndroidViewModel {
     private RecipeRepository recipeRepository;
 
-//    private final LiveData<Recipe> recipeById;
     private final LiveData<List<Recipe>> allRecipes;
-
-//    private final LiveData<List<RecipeWithInstructions>> allRecipesWithInstructions;
-
 
     public RecipeViewModel (Application app){
         super(app);
         recipeRepository = new RecipeRepository(app);
         allRecipes = recipeRepository.getAllRecipes();
-//        allRecipesWithInstructions = recipeRepository.getRecipesWithInstructions();
     }
 
     LiveData<Recipe> getRecipeById(int recipeId) {
@@ -37,7 +32,9 @@ public class RecipeViewModel extends AndroidViewModel {
         return recipeRepository.getInstructionById(instructionId);
     }
 
-    public void insertRecipe(Recipe recipe){ recipeRepository.insertRecipe(recipe); }
+    public void insertRecipe(Recipe recipe){
+        recipeRepository.insertRecipe(recipe);
+    }
 
     public void updateRecipe(Recipe recipe){ recipeRepository.updateRecipe(recipe); }
 

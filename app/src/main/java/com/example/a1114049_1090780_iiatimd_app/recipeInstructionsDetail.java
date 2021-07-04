@@ -44,7 +44,7 @@ public class recipeInstructionsDetail extends AppCompatActivity {
         int detailRecipeid = receivingIntent.getIntExtra("RECIPE_ID", 0);
 
         recipeViewModel.getRecipesWithInstructions(detailRecipeid).observe( this, instructions -> {
-//            myInstructions.clear();
+            myInstructions.clear();
             try {
 
                 for (int i = 0; i < instructions.size(); i++) {
