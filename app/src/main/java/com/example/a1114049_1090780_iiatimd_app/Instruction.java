@@ -5,6 +5,12 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+// Instructie klasse
+// uuid: primaire sleutel
+// recipe_id: foreign key met de receptentabel
+// step_number: de rangorde van een instructie
+// description: de beschrijving van wat er moet gebeuren
+
 @Entity
 public class Instruction {
 

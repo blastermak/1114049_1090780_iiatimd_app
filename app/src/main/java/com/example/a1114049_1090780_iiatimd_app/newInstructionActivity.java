@@ -19,6 +19,8 @@ import com.google.android.material.textfield.TextInputLayout;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+// Activity om nieuwe instructies toe te voegen bij een specifiek recept
+
 public class newInstructionActivity extends AppCompatActivity {
 
     private TextInputLayout newDescriptionLayout;
@@ -41,6 +43,7 @@ public class newInstructionActivity extends AppCompatActivity {
         submitInstructionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Validatie en fouthandeling voor bij de invoervelden
                 boolean formValidated = false;
                 if (TextUtils.isEmpty(String.valueOf(newDescriptionLayout.getEditText().getText()))) {
                     newDescriptionLayout.setError("Je hebt geen naam ingevuld");
@@ -49,6 +52,7 @@ public class newInstructionActivity extends AppCompatActivity {
                     formValidated = true;
                 }
                 if (formValidated) {
+                    // Request om de ingevulde data naar de database te sturen
                     try {
                         String URL = "http://iiatimd.jimmak.nl/api/recipes/" + detailRecipeId + "/instructions";
                         JSONObject jsonBody = new JSONObject();

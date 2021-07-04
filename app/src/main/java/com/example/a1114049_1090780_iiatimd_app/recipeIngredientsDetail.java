@@ -14,6 +14,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.List;
 
+// Activity om de ingrediënten van een recept weer te geven
+
 public class recipeIngredientsDetail extends AppCompatActivity {
 
     private RecyclerView ingredientsListRecyclerView;
@@ -42,6 +44,8 @@ public class recipeIngredientsDetail extends AppCompatActivity {
         Intent receivingIntent = getIntent();
         int detailRecipeid = receivingIntent.getIntExtra("RECIPE_ID", 0);
 
+
+        // Livedata observer om de ingredienten op te halen
         recipeViewModel.getRecipesWithIngredients(detailRecipeid).observe(this, ingredients -> {
             myIngredients.clear();
             try {
@@ -49,7 +53,6 @@ public class recipeIngredientsDetail extends AppCompatActivity {
                     ingredientList = ingredients.get(i).ingredientList;
                     for (int j = 0; j < ingredientList.size(); j++) {
                         myIngredients.add(ingredientList.get(j));
-//                        ingredientsListRecyclerViewAdapter.notifyItemInserted(myIngredients.size() - 1);
                     }
                 }
                 ingredientsListRecyclerViewAdapter.notifyDataSetChanged();
@@ -60,6 +63,8 @@ public class recipeIngredientsDetail extends AppCompatActivity {
         ingredientsListRecyclerViewAdapter = new IngredientAdapter(recipeViewModel, myIngredients);
         ingredientsListRecyclerView.setAdapter(ingredientsListRecyclerViewAdapter);
 
+
+        // Logica om naar de activity voor het toevoegen van een ingredient te gaan
         fab = findViewById(R.id.newIngredientButton);
         fab.setOnClickListener(new View.OnClickListener(){
             @Override

@@ -26,6 +26,8 @@ import org.json.JSONObject;
 
 import java.util.List;
 
+// Adapter klasse voor het weergeven van ingrediënten in een recyclerview
+
 public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.IngredientViewHolder>{
 
     private RecipeViewModel viewModel;
@@ -69,6 +71,8 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.In
 
         return ingredientViewHolder;
     }
+    // onBindViewHolder zorgt voor alle interactie in de recyclerview
+    // Als eerste zetten we de juiste waardes in de juiste velden
 
     @Override
     public void onBindViewHolder(@NonNull IngredientAdapter.IngredientViewHolder holder, int position){
@@ -83,8 +87,12 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.In
 
         holder.editButton.setOnClickListener(new View.OnClickListener(){
             boolean editing = false;
+            // Voor het vergelijken van de waardes en zo onnodige requests te voorkomen
             String oldName = thisIngredient.getName();
             String oldAmount = thisIngredient.getAmount();
+
+            // Wanneer op de editknop geklikt wordt
+            // De juiste velden worden weergegeven en verborgen
             @Override
             public void onClick(View v){
                 if (editing){
@@ -94,6 +102,8 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.In
                     holder.nameInputLayout.setVisibility(View.GONE);
                     holder.amountInputLayout.setVisibility(View.GONE);
 
+
+                    // Check welke waardes aangepast zijn en verstuur de juiste waardes
                     if (holder.nameInputLayout.getEditText().getText().toString() != oldName &&
                             holder.amountInputLayout.getEditText().getText().toString() == oldAmount ){
                         thisIngredient.setName(holder.nameInputLayout.getEditText().getText().toString());
@@ -131,6 +141,8 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.In
         return ingredients.size();
     }
 
+
+    // Functie om data naar de database te sturen met behulp van een volleyrequest
     public void sendToServer(Ingredient ingredient, View v){
         try {
             String URL = "http://iiatimd.jimmak.nl/api/ingredients/" + ingredient.getUuid();

@@ -92,11 +92,15 @@ public class ListFragment extends Fragment  {
     @Override
     public void onViewCreated(View view, Bundle savedInstances){
         super.onViewCreated(view, savedInstances);
+
+        // Initialiseer de recyclerview en de bijbehorende variabelen
         recipeListRecyclerView = view.findViewById(R.id.recipeListRecyclerView);
         layoutManager = new LinearLayoutManager(this.getContext());
         recipeListRecyclerView.setLayoutManager(layoutManager);
         recipeListRecyclerView.hasFixedSize();
 
+
+        // Verkrijg de receptendata middels een livedata observer
         recipeViewModel = new ViewModelProvider(this).get(RecipeViewModel.class);
         recipeViewModel.getAllRecipes().observe(getViewLifecycleOwner(), recipes -> {
             for (int i = 0; i < recipes.size(); i++){
@@ -110,6 +114,7 @@ public class ListFragment extends Fragment  {
         recipeListRecyclerViewAdapter = new RecipeAdapter(myRecipes);
         recipeListRecyclerView.setAdapter(recipeListRecyclerViewAdapter);
 
+        // Clicklistener om naar de juiste receptenpagina te gaan
         recipeListRecyclerViewAdapter.setOnItemClickListener(new RecipeAdapter.recipeItemClickListener(){
             @Override
             public void onItemClick(View v, int position){
@@ -118,9 +123,6 @@ public class ListFragment extends Fragment  {
                 startActivity(intent);
             }
         });
-
-
-
     }
 
 }

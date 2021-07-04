@@ -31,6 +31,8 @@ import org.w3c.dom.Text;
 
 import java.io.UnsupportedEncodingException;
 
+// Activity om nieuwe instructies toe te voegen bij een specifiek recept
+
 public class newRecipeActivity extends AppCompatActivity {
 
     private TextInputEditText recipeTitleText;
@@ -43,10 +45,6 @@ public class newRecipeActivity extends AppCompatActivity {
     private boolean formValidated = false;
 
     private RecipeViewModel recipeViewModel;
-
-    private AppDatabase db;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,13 +61,12 @@ public class newRecipeActivity extends AppCompatActivity {
 
         recipeSubmitButton.setOnClickListener(this::newRecipeSubmitHandler);
 
-        db = AppDatabase.getDatabase(newRecipeActivity.this);
-
         recipeViewModel = new ViewModelProvider(this).get(RecipeViewModel.class);
 
     }
 
     public void newRecipeSubmitHandler(View view){
+        // Validatie en fouthandeling voor bij de invoervelden
         if (TextUtils.isEmpty(String.valueOf(recipeTitleText.getText()))) {
             recipeTitleText.setError("Je hebt geen titel ingevuld");
             formValidated = false;
@@ -97,7 +94,7 @@ public class newRecipeActivity extends AppCompatActivity {
 
         if (formValidated) {
             try {
-                RequestQueue requestQueue = Volley.newRequestQueue(this);
+                // Request om de ingevulde data naar de database te sturen
 //                String URL = "http://iiatimd.jimmak.nl/api/recipe";
                 String URL = "http://10.0.2.2:8000/api/recipe";
                 JSONObject jsonBody = new JSONObject();

@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
+//Adapter klasse voor het weergeven van recepten in een recyclerview
+
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder>  {
 
     private List<Recipe> recipes;
@@ -32,7 +34,6 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         public TextView titleTextView;
         public TextView summaryTextView;
         public CardView recipeCardView;
-        private recipeItemClickListener myItemClickListener;
 
         public RecipeViewHolder(View v, recipeItemClickListener listener){
             super(v);

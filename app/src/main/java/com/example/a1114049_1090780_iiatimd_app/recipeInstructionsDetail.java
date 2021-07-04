@@ -17,6 +17,8 @@ import com.google.android.material.textfield.TextInputLayout;
 import java.util.ArrayList;
 import java.util.List;
 
+// Activity om de ingrediënten van een recept weer te geven
+
 public class recipeInstructionsDetail extends AppCompatActivity {
 
     private RecyclerView instructionsListRecyclerView;
@@ -45,6 +47,7 @@ public class recipeInstructionsDetail extends AppCompatActivity {
         Intent receivingIntent = getIntent();
         int detailRecipeid = receivingIntent.getIntExtra("RECIPE_ID", 0);
 
+        // Livedata observer om de instructies op te halen
         recipeViewModel.getRecipesWithInstructions(detailRecipeid).observe( this, instructions -> {
             myInstructions.clear();
             try {
@@ -52,15 +55,13 @@ public class recipeInstructionsDetail extends AppCompatActivity {
                 for (int i = 0; i < instructions.size(); i++) {
                     instructionList = instructions.get(i).instructionList;
                     for (int j = 0; j < instructionList.size(); j ++){
-                        Log.d("instructionsgelijk", "uuid: " + instructionList.get(j).getUuid());
                         myInstructions.add(instructionList.get(j));
-
                     }
 
                 }
                 instructionsListRecyclerViewAdapter.notifyDataSetChanged();
             } catch (IndexOutOfBoundsException e){
-//                recipeInstructionsTextView.setText("Geen instructies gevonden!");
+
             }
 
         });
@@ -68,6 +69,7 @@ public class recipeInstructionsDetail extends AppCompatActivity {
         instructionsListRecyclerViewAdapter = new InstructionAdapter(recipeViewModel, myInstructions);
         instructionsListRecyclerView.setAdapter(instructionsListRecyclerViewAdapter);
 
+        // Logica om naar de activity voor het toevoegen van een instructie te gaan
         fab = findViewById(R.id.newInstructionButton);
         fab.setOnClickListener(new View.OnClickListener(){
             @Override

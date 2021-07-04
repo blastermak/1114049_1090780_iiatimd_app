@@ -5,6 +5,8 @@ import androidx.room.Relation;
 
 import java.util.List;
 
+// Koppeling van instructies met recepten
+
 public class RecipeWithInstructions {
     @Embedded public Recipe recipe;
     @Relation(

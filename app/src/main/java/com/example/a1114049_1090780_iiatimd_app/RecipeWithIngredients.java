@@ -5,6 +5,9 @@ import androidx.room.Relation;
 
 import java.util.List;
 
+
+// Koppeling van ingredienten met recepten
+
 public class RecipeWithIngredients {
     @Embedded public Recipe recipe;
     @Relation(

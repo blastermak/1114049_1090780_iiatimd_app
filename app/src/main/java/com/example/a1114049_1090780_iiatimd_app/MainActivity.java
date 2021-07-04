@@ -48,9 +48,9 @@ public class MainActivity extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Initialize the bottomnavigationview
-        // Setting the correct listener for it
-        // and open the homefragment
+        // Initialiseer de bottomnavigationview
+        // Met de juiste listener en interactie
+        // en open de homefragment als eerste
         bottomNavigationView = findViewById(R.id.bottomNavigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
         openFragment(HomeFragment.newInstance("","" ));
@@ -64,6 +64,8 @@ public class MainActivity extends AppCompatActivity  {
             }
         });
 
+
+        // Request om alle receptendata van de database op te halen
         JsonObjectRequest recipeJsonObjectRequest = new JsonObjectRequest(Request.Method.GET, database_url,null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -90,6 +92,7 @@ public class MainActivity extends AppCompatActivity  {
             }
         });
 
+        // Request om alle instructiedata van de database op te halen
         JsonObjectRequest instructionsJsonObjectRequest = new JsonObjectRequest(Request.Method.GET, database_instructions_url,null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -115,6 +118,7 @@ public class MainActivity extends AppCompatActivity  {
             }
         });
 
+        // Request om alle ingredientendata van de database op te halen
         JsonObjectRequest ingredientsJsonObjectRequest = new JsonObjectRequest(Request.Method.GET, database_ingredients_url,null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -140,6 +144,7 @@ public class MainActivity extends AppCompatActivity  {
             }
         });
 
+        // Voer de gemaakte requests daadwerkelijk uit
         VolleySingleton.getInstance(this.getApplicationContext()).addToRequestQueue(recipeJsonObjectRequest);
         VolleySingleton.getInstance(this.getApplicationContext()).addToRequestQueue(instructionsJsonObjectRequest);
         VolleySingleton.getInstance(this.getApplicationContext()).addToRequestQueue(ingredientsJsonObjectRequest);

@@ -5,6 +5,13 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+
+//Ingredient klasse
+//uuid: primaire sleutel
+//recipe_id: foreign key met de receptentabel
+//name: de naam van het ingrediënt
+//amount: de hoeveelheid van het ingrediënt
+
 @Entity
 public class Ingredient {
 

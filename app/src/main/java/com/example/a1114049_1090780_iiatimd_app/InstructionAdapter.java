@@ -29,6 +29,9 @@ import org.json.JSONObject;
 
 import java.util.List;
 
+
+//Adapter klasse voor het weergeven van instructies in een recyclerview
+
 public class InstructionAdapter extends RecyclerView.Adapter<InstructionAdapter.InstructionViewHolder>{
 
     private RecipeViewModel viewModel;
@@ -69,6 +72,9 @@ public class InstructionAdapter extends RecyclerView.Adapter<InstructionAdapter.
         return instructionViewHolder;
     }
 
+
+    // onBindViewHolder zorgt voor alle interactie in de recyclerview
+    // Als eerste zetten we de juiste waardes in de juiste velden
     @Override
     public void onBindViewHolder(@NonNull InstructionAdapter.InstructionViewHolder holder, int position){
 
@@ -79,13 +85,19 @@ public class InstructionAdapter extends RecyclerView.Adapter<InstructionAdapter.
 
         holder.editButton.setOnClickListener(new View.OnClickListener(){
             boolean editing = false;
+            // Voor het vergelijken van de waardes en zo onnodige requests te voorkomen
             String oldDescription = thisInstruction.getDescription();
+
+            // Wanneer op de editknop geklikt wordt
+            // De juiste velden worden weergegeven en verborgen
             @Override
             public void onClick(View v){
                 if (editing){
                     holder.descriptionTextView.setVisibility(View.VISIBLE);
                     holder.editInstructionTextInputLayout.setVisibility(View.GONE);
 
+
+                    // Check welke waardes aangepast zijn en verstuur de juiste waardes
                     if (holder.editInstructionDescriptionTextEdit.getText().toString() != oldDescription ){
                         holder.descriptionTextView.setText(holder.editInstructionDescriptionTextEdit.getText().toString());
                         thisInstruction.setDescription(holder.editInstructionDescriptionTextEdit.getText().toString());
@@ -109,6 +121,8 @@ public class InstructionAdapter extends RecyclerView.Adapter<InstructionAdapter.
         return instructions.size();
     }
 
+
+    // Functie om data naar de database te sturen met behulp van een volleyrequest
     public void sendToServer(Instruction instruction, View v){
         try {
             String URL = "http://iiatimd.jimmak.nl/api/instructions/" + instruction.getUuid();

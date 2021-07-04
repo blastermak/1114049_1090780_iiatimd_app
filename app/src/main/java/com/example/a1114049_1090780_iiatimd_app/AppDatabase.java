@@ -13,7 +13,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 
-
+//Database klasse waarin de vorm van de database vorm gegeven wordt.
+//Migratie 1 naar 2 voegt de instructies tabel toe
+//Migratie 2 naar 3 verandert een kolom zodat die niet null is
+//Migratie 3 naar 4 voegt de ingrediënten tabel toe
 
 @Database(entities = {Recipe.class, Instruction.class, Ingredient.class}, version = 4)
 public abstract class AppDatabase extends RoomDatabase {

@@ -14,6 +14,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+// Activity voor het weergeven van receptendetails
+
 public class recipeDetailActivity extends AppCompatActivity {
 
     private TextView recipeTitleTextView;
@@ -84,11 +86,16 @@ public class recipeDetailActivity extends AppCompatActivity {
     }
 
     public void actionButtonOnClick(View v){
+
+        // Zorgt ervoor dat de relevante velden verdwijnen en verschijnen wanneer er bewerkt wordt
         if (editing){
             recipeTitleTextView.setVisibility(View.VISIBLE);
             recipeDescriptionTextView.setVisibility(View.VISIBLE);
             editRecipeTitleLayout.setVisibility(View.GONE);
             editRecipeDescriptionLayout.setVisibility(View.GONE);
+
+            ingredientsButton.setVisibility(View.VISIBLE);
+            instructionsButton.setVisibility(View.VISIBLE);
 
             recipeDetail.setTitle(editRecipeTitleText.getText().toString());
             recipeDetail.setDescription(editRecipeDescriptionText.getText().toString());
@@ -102,6 +109,9 @@ public class recipeDetailActivity extends AppCompatActivity {
             recipeDescriptionTextView.setVisibility(View.GONE);
             editRecipeTitleLayout.setVisibility(View.VISIBLE);
             editRecipeDescriptionLayout.setVisibility(View.VISIBLE);
+
+            ingredientsButton.setVisibility(View.GONE);
+            instructionsButton.setVisibility(View.GONE);
 
             editRecipeTitleText.setText(recipeDetail.getTitle());
             editRecipeDescriptionText.setText(recipeDetail.getDescription());

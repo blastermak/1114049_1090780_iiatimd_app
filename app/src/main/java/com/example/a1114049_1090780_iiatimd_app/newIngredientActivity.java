@@ -19,6 +19,8 @@ import com.google.android.material.textfield.TextInputLayout;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+// Activity om nieuwe ingredienten toe te voegen bij een specifiek recept
+
 public class newIngredientActivity extends AppCompatActivity {
 
     private TextInputLayout newNameLayout;
@@ -43,6 +45,7 @@ public class newIngredientActivity extends AppCompatActivity {
         submitIngredientButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
+                // Validatie en fouthandeling voor bij de invoervelden
                 boolean formValidated = false;
                 if (TextUtils.isEmpty(String.valueOf(newNameLayout.getEditText().getText()))) {
                     newNameLayout.setError("Je hebt geen naam ingevuld");
@@ -57,6 +60,7 @@ public class newIngredientActivity extends AppCompatActivity {
                     formValidated = true;
                 }
                 if (formValidated) {
+                    // Request om de ingevulde data naar de database te sturen
                     try {
                         String URL = "http://iiatimd.jimmak.nl/api/recipes/" + detailRecipeid + "/ingredients";
                         JSONObject jsonBody = new JSONObject();
@@ -78,12 +82,7 @@ public class newIngredientActivity extends AppCompatActivity {
                                                     jsonResponse[0].getString("name"),
                                                     jsonResponse[0].getString("amount")
                                             ));
-//                            Intent intent = new Intent(newIngredientActivity.this, recipeDetailActivity.class);
-//                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                            intent.putExtra("RECIPE_ID", jsonResponse[0].getInt("id"));
-                                    // Finish is needed so that we don't see the new recipe screen when pressing back
                                     finish();
-//                            startActivity(intent);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }

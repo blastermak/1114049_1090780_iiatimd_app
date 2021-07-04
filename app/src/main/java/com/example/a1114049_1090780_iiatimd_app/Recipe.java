@@ -5,6 +5,13 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 
+// Recept klasse
+// uuid: primaire sleutel
+// title: de naam van het recept
+// description_short: korte beschrijving van het recept
+// description: uitgebreide beschrijving van het recept
+// prep_time_min: hoe lang het duurt om te maken
+
 @Entity
 public class Recipe {
 

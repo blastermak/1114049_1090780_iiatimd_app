@@ -10,7 +10,6 @@ public class RecipeRepository {
     private RecipeDAO recipeDAO;
 
     private LiveData<List<Recipe>> allRecipes;
-    private LiveData<List<RecipeWithInstructions>> allRecipesWithInstructions;
 
     RecipeRepository(Application app){
         AppDatabase db = AppDatabase.getDatabase(app);
