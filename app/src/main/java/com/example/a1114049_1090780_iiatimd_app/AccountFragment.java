@@ -63,22 +63,26 @@ public class AccountFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_account, container, false);
 
+        // creating button and onClickListener
         Button logoutButton = view.findViewById(R.id.logoutButton);
-
         logoutButton.setOnClickListener(this::logout);
 
+        // Adding token to global token state
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getContext());
         String userToken = settings.getString("userToken", null);
+
+        // setting username to account view
         String username = settings.getString("username", "");
         TextView usernameText = view.findViewById(R.id.usernameField);
         usernameText.setText("Welkom " + username + "!");
-        // Inflate the layout for this fragment
         return view;
     }
 
     private void logout(View view) {
+        // logging out and deleting token
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getContext());
         SharedPreferences.Editor editor = settings.edit();
         editor.putString("userToken", null);
@@ -88,6 +92,7 @@ public class AccountFragment extends Fragment {
     }
 
     public void openAccountView() {
+        // opening new activity on accountview fragment
         Intent intent = new Intent(getContext(), MainActivity.class);
         intent.putExtra("fragmentToLoad", "AccountFragment");
         startActivity(intent);

@@ -173,6 +173,7 @@ public class MainActivity extends AppCompatActivity  {
                         openFragment(SearchFragment.newInstance("",""));
                         return true;
                     case R.id.bottom_menu_page_account:
+                        // checking which fragment to open
                         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                         String userToken = settings.getString("userToken",null);
                         if (userToken != null) {

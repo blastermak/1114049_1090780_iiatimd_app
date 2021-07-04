@@ -47,6 +47,7 @@ public class LoginActivity extends AppCompatActivity {
 
         queue = Volley.newRequestQueue(getApplicationContext());
 
+        // creating user input fields and adding them as a variable
         EditText userEmail = findViewById(R.id.inputLoginEmail);
         EditText userPassword = findViewById(R.id.inputLoginPassword);
 
@@ -71,6 +72,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void login(String username, String password) {
+        // validating the form
         boolean formIsValid = false;
 
         if (!username.isEmpty() && !password.isEmpty() && username.contains("@")) {
@@ -79,6 +81,7 @@ public class LoginActivity extends AppCompatActivity {
 
         if (formIsValid) {
             try {
+                // creating json body for the request
                 authenticating = true;
                 JSONObject jsonBody = new JSONObject();
                 jsonBody.put("email", username);
@@ -86,6 +89,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 final JSONObject[] jsonResponse = {new JSONObject()};
 
+                // Sending the actual request
                 JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, database_url, jsonBody, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -98,6 +102,7 @@ public class LoginActivity extends AppCompatActivity {
                             String username = user.getString("name");
                             Log.d("username", username);
 
+                            // storing the token in the shared preferences
                             SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                             SharedPreferences.Editor editor = settings.edit();
                             editor.putString("userToken", userToken);

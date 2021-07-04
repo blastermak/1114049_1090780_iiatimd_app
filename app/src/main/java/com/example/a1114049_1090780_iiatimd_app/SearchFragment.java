@@ -89,6 +89,7 @@ public class SearchFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
+        // recyclerView and other parts are created so that they can be filled later with the content loaded from the local or Laravel DB
         searchRecyclerView = view.findViewById(R.id.searchRecyclerView);
         layoutManager = new LinearLayoutManager(this.getContext());
         searchRecyclerView.setLayoutManager(layoutManager);
@@ -146,6 +147,7 @@ public class SearchFragment extends Fragment {
     }
 
     public void searchDb(JSONArray searchTerm) {
+        // Searching Laravel DB
         myRecipes.clear();
         for (int i = 0; i < searchTerm.length(); i++) {
             try {
@@ -157,18 +159,22 @@ public class SearchFragment extends Fragment {
                 e.printStackTrace();
             }
         }
+
+        // Adding items to recyclerView
         searchRecyclerViewAdapter.notifyItemInserted(myRecipes.size()-1);
         searchRecyclerViewAdapter = new RecipeAdapter(myRecipes);
         searchRecyclerView.setAdapter(searchRecyclerViewAdapter);
     }
 
     public void searchLocal(String searchTerm) {
+        // strip searchTerm of unused characters
         String[] value = searchTerm.split("\"");
         String searchTerm2 = "%" + value[3] + "%";
         getRecipes(searchTerm2);
     }
 
     public void getRecipes(String searchTerm) {
+        // searching Local DB
         myRecipes.clear();
         recipeViewModel.getSearchRecipes(searchTerm).observe(getViewLifecycleOwner(), recipes -> {
             for (int i = 0; i < recipes.size(); i++) {
@@ -178,6 +184,7 @@ public class SearchFragment extends Fragment {
                 }
             }
         });
+        // Adding items to recycler view
         searchRecyclerViewAdapter = new RecipeAdapter(myRecipes);
         searchRecyclerView.setAdapter(searchRecyclerViewAdapter);
     }
