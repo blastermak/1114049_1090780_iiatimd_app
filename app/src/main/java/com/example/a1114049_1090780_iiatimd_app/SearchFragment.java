@@ -4,6 +4,8 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,8 +21,13 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -31,6 +38,12 @@ public class SearchFragment extends Fragment {
     String database_url = "http://10.0.2.2:8000/api/search/";
     RequestQueue queue;
     private RecipeViewModel recipeViewModel;
+
+    private RecyclerView searchRecyclerView;
+    private RecipeAdapter searchRecyclerViewAdapter;
+    private RecyclerView.LayoutManager layoutManager;
+
+    private ArrayList<Recipe> myRecipes = new ArrayList<>();
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -76,6 +89,11 @@ public class SearchFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
+        searchRecyclerView = view.findViewById(R.id.searchRecyclerView);
+        layoutManager = new LinearLayoutManager(this.getContext());
+        searchRecyclerView.setLayoutManager(layoutManager);
+        searchRecyclerViewAdapter = new RecipeAdapter(myRecipes);
+
         Button searchButton = view.findViewById(R.id.searchButton);
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,16 +118,17 @@ public class SearchFragment extends Fragment {
             try {
                 JSONObject jsonBody = new JSONObject();
                 jsonBody.put("search", searchInput);
-                final JSONObject[] jsonResponse = {new JSONObject()};
+                final JSONArray[] jsonResponse = {new JSONArray()};
                 JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, database_url, jsonBody, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d("VolleyResponse", String.valueOf(response));
                         try {
-                            jsonResponse[0] = response.getJSONObject("data");
+                            jsonResponse[0] = response.getJSONArray("data");
+                            searchDb(jsonResponse[0]);
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Log.d("failed to connect", "failed");
+                            Log.d("failed", "failed to connect");
                         }
                     }
                 }, new Response.ErrorListener() {
@@ -126,12 +145,40 @@ public class SearchFragment extends Fragment {
         }
     }
 
+    public void searchDb(JSONArray searchTerm) {
+        myRecipes.clear();
+        for (int i = 0; i < searchTerm.length(); i++) {
+            try {
+                JSONObject jsonObject = new JSONObject();
+                jsonObject = searchTerm.getJSONObject(i);
+                Recipe recipe = new Recipe(jsonObject.getInt("id"), jsonObject.getString("title"), jsonObject.getString("description_short"), jsonObject.getString("description"), jsonObject.getInt("prep_time_min"));
+                myRecipes.add(recipe);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        searchRecyclerViewAdapter.notifyItemInserted(myRecipes.size()-1);
+        searchRecyclerViewAdapter = new RecipeAdapter(myRecipes);
+        searchRecyclerView.setAdapter(searchRecyclerViewAdapter);
+    }
+
     public void searchLocal(String searchTerm) {
+        String[] value = searchTerm.split("\"");
+        String searchTerm2 = "%" + value[3] + "%";
+        getRecipes(searchTerm2);
+    }
+
+    public void getRecipes(String searchTerm) {
+        myRecipes.clear();
         recipeViewModel.getSearchRecipes(searchTerm).observe(getViewLifecycleOwner(), recipes -> {
-            Log.d("inside", "inside recipeViewModel");
             for (int i = 0; i < recipes.size(); i++) {
-                Log.d("recept", String.valueOf(recipes.get(i)));
+                if (!myRecipes.contains(recipes.get(i))) {
+                    myRecipes.add(recipes.get(i));
+                    searchRecyclerViewAdapter.notifyItemInserted(recipes.size());
+                }
             }
         });
+        searchRecyclerViewAdapter = new RecipeAdapter(myRecipes);
+        searchRecyclerView.setAdapter(searchRecyclerViewAdapter);
     }
 }
