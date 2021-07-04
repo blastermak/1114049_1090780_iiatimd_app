@@ -64,7 +64,6 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     JSONArray recipeData = response.getJSONArray("data");
                     for (int i = 0; i < recipeData.length(); i++){
-                        Log.d("first fetch of data", recipeData.get(i).toString());
                         Recipe recipe = new Recipe (
                                         recipeData.getJSONObject(i).getInt("id"),
                                         recipeData.getJSONObject(i).getString("title"),
@@ -91,7 +90,6 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     JSONArray instructionData = response.getJSONArray("data");
                     for (int i = 0; i < instructionData.length(); i++){
-                        Log.d("first fetch of data", instructionData.get(i).toString());
                         Instruction instruction = new Instruction (
                                 instructionData.getJSONObject(i).getInt("id"),
                                 instructionData.getJSONObject(i).getInt("recipe_id"),
@@ -117,7 +115,6 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     JSONArray ingredientsData = response.getJSONArray("data");
                     for (int i = 0; i < ingredientsData.length(); i++){
-                        Log.d("first fetch of data", ingredientsData.get(i).toString());
                         Ingredient ingredient = new Ingredient (
                                 ingredientsData.getJSONObject(i).getInt("id"),
                                 ingredientsData.getJSONObject(i).getInt("recipe_id"),

@@ -25,6 +25,10 @@ public class RecipeRepository {
         return recipeDAO.getRecipeById(recipeId);
     }
 
+    LiveData<List<Recipe>> getSearchRecipe(String searchString){
+        return recipeDAO.getSearchRecipe(searchString);
+    }
+
     void insertRecipe(Recipe recipe){
         AppDatabase.databaseWriterExecutor.execute(() -> {
             recipeDAO.insertRecipe(recipe);
@@ -41,9 +45,19 @@ public class RecipeRepository {
         return recipeDAO.getRecipesWithInstructions(recipeId);
     }
 
+    LiveData<Instruction> getInstructionById (int instructionId){
+        return recipeDAO.getInstructionById(instructionId);
+    }
+
     void insertInstruction(Instruction instruction){
         AppDatabase.databaseWriterExecutor.execute(() -> {
             recipeDAO.insertInstruction(instruction);
+        });
+    }
+
+    void updateInstruction(Instruction instruction){
+        AppDatabase.databaseWriterExecutor.execute(() -> {
+            recipeDAO.updateInstruction(instruction);
         });
     }
 

@@ -12,7 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.1114049_1090780_iiatimd_app.NoActionBar"
         android:usesCleartextTraffic="true">
-        <activity android:name=".recipeDetailActivity"></activity>
+        <activity android:name=".recipeInstructionsDetail"></activity>
+        <activity android:name=".recipeIngredientsDetail" />
+        <activity android:name=".recipeDetailActivity" />
         <activity android:name=".newRecipeActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>

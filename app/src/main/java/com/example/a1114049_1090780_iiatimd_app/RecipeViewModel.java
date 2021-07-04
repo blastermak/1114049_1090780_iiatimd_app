@@ -29,6 +29,14 @@ public class RecipeViewModel extends AndroidViewModel {
 
     LiveData<List<Recipe>> getAllRecipes() { return allRecipes; }
 
+    LiveData<List<Recipe>> getSearchRecipes(String searchString) {
+        return recipeRepository.getSearchRecipe(searchString);
+    }
+
+    LiveData<Instruction> getInstructionById(int instructionId){
+        return recipeRepository.getInstructionById(instructionId);
+    }
+
     public void insertRecipe(Recipe recipe){ recipeRepository.insertRecipe(recipe); }
 
     public void updateRecipe(Recipe recipe){ recipeRepository.updateRecipe(recipe); }
@@ -39,6 +47,10 @@ public class RecipeViewModel extends AndroidViewModel {
 
     public void insertInstruction(Instruction instruction){
         recipeRepository.insertInstruction(instruction);
+    }
+
+    public void updateInstruction(Instruction instruction){
+        recipeRepository.updateInstruction(instruction);
     }
 
     LiveData<RecipeWithIngredients> getRecipesWithIngredients(int recipeId){

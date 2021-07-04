@@ -37,7 +37,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         public RecipeViewHolder(View v, recipeItemClickListener listener){
             super(v);
             titleTextView = v.findViewById(R.id.instructionStepNumber);
-            summaryTextView = v.findViewById(R.id.ingredientName);
+            summaryTextView = v.findViewById(R.id.instructionDescription);
             recipeCardView = v.findViewById(R.id.recipeCard);
             v.setOnClickListener(new View.OnClickListener() {
                 @Override

@@ -27,7 +27,7 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.In
         public IngredientViewHolder(View v){
             super(v);
 
-            ingredientNameTextView = v.findViewById(R.id.ingredientName);
+            ingredientNameTextView = v.findViewById(R.id.instructionDescription);
             ingredientAmountTextView = v.findViewById(R.id.ingredientAmount);
         }
     }

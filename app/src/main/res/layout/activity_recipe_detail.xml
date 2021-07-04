@@ -59,7 +59,7 @@
         app:srcCompat="@drawable/ic_baseline_edit_24" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/editRecipeTitleTextLayout"
+        android:id="@+id/editInstructionTextLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -90,7 +90,7 @@
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editRecipeTitleTextLayout">
+        app:layout_constraintTop_toBottomOf="@+id/editInstructionTextLayout">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editRecipeDescriptionEdit"
@@ -99,56 +99,26 @@
             android:hint="@string/newRecipeDescriptionHint" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/instructionsRecyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
-
-    <TextView
-        android:id="@+id/textView"
+    <Button
+        android:id="@+id/goToIngredientsButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="8dp"
-        android:text="@string/instructionsHeader"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:text="@string/ingredientsHeader"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/recipeDetailDescription" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/ingredientsRecyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4" />
-
-    <TextView
-        android:id="@+id/textView4"
+    <Button
+        android:id="@+id/goToInstructionsButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="8dp"
-        android:text="@string/ingredientsHeader"
-        android:textSize="20sp"
+        android:layout_marginTop="16dp"
+        android:text="@string/instructionsHeader"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/instructionsRecyclerView" />
+        app:layout_constraintTop_toBottomOf="@+id/recipeDetailDescription" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

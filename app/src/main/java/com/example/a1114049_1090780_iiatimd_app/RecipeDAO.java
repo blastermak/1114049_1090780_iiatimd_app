@@ -20,6 +20,9 @@ public interface RecipeDAO {
     @Query("SELECT * FROM recipe WHERE uuid = :id")
     LiveData<Recipe> getRecipeById(int id);
 
+    @Query("SELECT * FROM recipe WHERE description LIKE :searchstring")
+    LiveData<List<Recipe>> getSearchRecipe(String searchstring);
+
     @Insert()
     void insertAllRecipes(Recipe... recipes);
 
@@ -36,8 +39,14 @@ public interface RecipeDAO {
     @Query("SELECT * FROM recipe WHERE uuid = :id")
     LiveData<RecipeWithInstructions> getRecipesWithInstructions(int id);
 
+    @Query("SELECT * FROM instruction WHERE uuid = :id")
+    LiveData<Instruction> getInstructionById(int id);
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insertInstruction(Instruction instruction);
+
+    @Update
+    void updateInstruction(Instruction instruction);
 
     @Transaction
     @Query("SELECT * FROM recipe WHERE uuid = :id")
