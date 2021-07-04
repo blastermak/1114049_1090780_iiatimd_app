@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -37,6 +38,8 @@ public class ListFragment extends Fragment  {
     private RecyclerView.LayoutManager layoutManager;
 
     private ArrayList<Recipe> myRecipes = new ArrayList<>();
+
+    private RecipeViewModel recipeViewModel;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -83,9 +86,6 @@ public class ListFragment extends Fragment  {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-
-        View rootView = inflater.inflate(R.layout.fragment_list, container, false);
-
         return inflater.inflate(R.layout.fragment_list, container, false);
     }
 
@@ -97,37 +97,15 @@ public class ListFragment extends Fragment  {
         recipeListRecyclerView.setLayoutManager(layoutManager);
         recipeListRecyclerView.hasFixedSize();
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, "http://iiatimd.jimmak.nl/api/recipes/",null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    Log.d("gelukt", response.toString());
-                    JSONArray recipeData = response.getJSONArray("data");
-                    Log.d("recipejson", recipeData.toString());
-                    for (int i = 0; i < recipeData.length(); i++){
-                        myRecipes.add(new Recipe (
-                                recipeData.getJSONObject(i).getInt("id"),
-                                recipeData.getJSONObject(i).getString("title"),
-                                recipeData.getJSONObject(i).getString("description_short"),
-                                recipeData.getJSONObject(i).getString("description"),
-                                recipeData.getJSONObject(i).getInt("prep_time_min")
-                                )
-                        );
-                    }
-                    recipeListRecyclerViewAdapter.notifyDataSetChanged();
-                } catch (JSONException e) {
-                    e.printStackTrace();
+        recipeViewModel = new ViewModelProvider(this).get(RecipeViewModel.class);
+        recipeViewModel.getAllRecipes().observe(getViewLifecycleOwner(), recipes -> {
+            for (int i = 0; i < recipes.size(); i++){
+                if (!myRecipes.contains(recipes.get(i))) {
+                    myRecipes.add(recipes.get(i));
+                    recipeListRecyclerViewAdapter.notifyItemInserted(myRecipes.size()-1);
                 }
             }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.d("gefaald", error.getMessage());
-            }
-
         });
-
-        VolleySingleton.getInstance(this.getActivity().getApplicationContext()).addToRequestQueue(jsonObjectRequest);
 
         recipeListRecyclerViewAdapter = new RecipeAdapter(myRecipes);
         recipeListRecyclerView.setAdapter(recipeListRecyclerViewAdapter);
@@ -135,12 +113,14 @@ public class ListFragment extends Fragment  {
         recipeListRecyclerViewAdapter.setOnItemClickListener(new RecipeAdapter.recipeItemClickListener(){
             @Override
             public void onItemClick(View v, int position){
-                Log.d("clicklistener", "clicked + " + String.valueOf(position));
                 Intent intent = new Intent (v.getContext(), recipeDetailActivity.class);
-                intent.putExtra("RECIPE_TITLE", myRecipes.get(position).getTitle());
-                intent.putExtra("RECIPE_DESCRIPTION", myRecipes.get(position).getDescription());
+                intent.putExtra("RECIPE_ID", myRecipes.get(position).getUuid());
                 startActivity(intent);
             }
         });
+
+
+
     }
+
 }

@@ -38,4 +38,11 @@
     <string name="recipeDetailDescriptonShortPlaceholder">Dit is de korte beschrijving van het recept</string>
     <string name="recipeDetailDescriptionPlaceholder">Dit is de beschrijving van het recept</string>
     <string name="recipeDetailPrepTimeMinPlaceholder">42</string>
+
+    <!--    String pertaining to instructions card-->
+    <string name="instructionStepPrefix">Stap</string>
+    <string name="instructionsHeader">Instructies</string>
+
+    <!--    String pertaining to ingredients card-->
+    <string name="ingredientsHeader">Ingrediënten</string>
 </resources>

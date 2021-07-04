@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+
 @Entity
 public class Recipe {
 
@@ -49,4 +50,14 @@ public class Recipe {
     public int getUuid() {
         return this.uuid;
     }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setDescription_short(String description_short) { this.description_short = description_short; }
+
+    public void setDescription(String description) { this.description = description; }
+
+    public void setPrep_time_min(int prep_time_min) { this.prep_time_min = prep_time_min; }
 }
